@@ -2,36 +2,27 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
+	"url-shortener/api/internal/handlers"
 )
 
 func main() {
 	printMenu()
 
-	http.HandleFunc("/", rootHandler)
-	fmt.Println("listening\t/")
+	http.HandleFunc("/", handlers.RedirectHandler)
+	fmt.Println("listening\t/* and redirecting")
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("website/public"))))
 	fmt.Println("setting\t\t/public")
 
-	http.HandleFunc("/admin", adminHandler)
+	http.HandleFunc("/admin", handlers.AdminHandler)
 	fmt.Println("listening\t/admin")
 
-	fmt.Println("Server up at: http://localhost:8080")
+	fmt.Println("Server up at: http://localhost:8080\n\n")
 	http.ListenAndServe(":8080", nil)
 
 }
 
-func rootHandler(w http.ResponseWriter, req *http.Request) {
-	http.Redirect(w, req, "/admin", http.StatusFound)
-}
-
-func adminHandler(w http.ResponseWriter, req *http.Request) {
-	tmpl, _ := template.ParseFiles("website/admin.html")
-
-	tmpl.Execute(w, "admin+======")
-}
 func printMenu() {
 	fmt.Print("===========================================\n")
 	fmt.Print("URL-SHORTENER\n")
