@@ -4,9 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin</title>
+
+    <script src="/public/scripts/index.js"></script>
 </head>
 <body>
-    Admin Console
-    {{.}}
+    <header>
+        <h1>Admin Console</h1>
+        <img src="public/profile.jpg" alt="Profile Image" width="100px">    
+    </header>
+    
+    <div>
+        <form action="/api/create-redirect" method="POST" id="new-redirect-form">
+            <div>
+                <label for="description">Description</label>
+                <input type="text" id="description" placeholder="Enter Redirect Description"></input>
+            </div>
+            <div>
+                <label for="slug">Slug</label>
+                <input type="text" id="slug" placeholder="Enter Slug - Include /"></input>
+            </div>
+            <div>
+                <label for="destination">Destination URL</label>
+                <input type="url" id="destination" placeholder="Enter Destination URL"></input>
+            </div>
+            <button id="submit-new-redirect">Add Redirect</button>
+        </form>
+    </div>
+
+    <table id="redirects-table">
+        <tr>
+            <th>Description</th>
+            <th>Slug</th>
+            <th>Destination</th>
+        </tr>
+        {{range .Redirects}}
+        <tr>
+            <td>{{.Description}}</td>
+            <td><a href="{{.Slug}}"><span style="color: gray;">{{$.Host}}</span>{{.Slug}}</a></td>
+            <td><a href="{{.Destination}}">{{.Destination}}</a></td>
+        </tr>
+        {{end}}
+
+    </table>
+
 </body>
 </html>
