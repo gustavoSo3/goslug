@@ -1,20 +1,86 @@
-const newRedirectForm = document.getElementById("new-redirect-form");
+
+
+
 const subBtn = document.getElementById("submit-new-redirect");
 
-const redirectTable = document.getElementById("redirects-table");
 
-newRedirectForm.addEventListener("submit", (event) => {
-    event.preventDefault();
+const url = "/api/redirects";
 
-    var newRow = `
-        <tr>
-            <td>{{.Description}}</td>
-            <td><a href="{{.Slug}}"><span style="color: gray;">{{$.Host}}</span>{{.Slug}}</a></td>
-            <td><a href="{{.Destination}}">{{.Destination}}</a></td>
-        </tr>
-        `
+subBtn.addEventListener("click", async () => {
 
-    redirectTable.insertAdjacentHTML("beforeend", newRow);
+    const newRedirectDescription = document.getElementById("new-description");
+    const newRedirectSlug = document.getElementById("new-slug");
+    const newRedirectDestination = document.getElementById("new-destination");
 
-})
+    const newRedirect = {
+        Description: newRedirectDescription.value,
+        Slug: "/" + newRedirectSlug.value,
+        Destination: newRedirectDestination.value,
+    };
 
+    console.log(newRedirect);
+
+
+    try {
+        // Make the POST request to /api/redirects
+        const res = await fetch(url, {
+        method: 'POST', // Specify the HTTP method
+        headers: {
+            'Content-Type': 'application/json' // Tell the server you're sending JSON
+        },
+        body: JSON.stringify(newRedirect) // Convert the JS object into a JSON string
+        });
+
+        // Handle the server's response
+        if (res.ok) {
+            const newConfirmedRedirect = await res.json();
+            console.log('Success:', newConfirmedRedirect);
+
+            location.reload();
+            
+
+        } else {
+            console.error('Server error:', res.status);
+        }
+    } catch (error) {
+        // Handle network errors or issues with the fetch itself
+        console.error('Network error:', error);
+    }
+});
+
+
+async function deleteRedirect(slug) {
+
+
+    const deleteSlug = {
+        Slug: slug,
+    };
+
+    console.log(deleteSlug);
+
+
+    try {
+        // Make the DELETE request to /api/redirects
+        const res = await fetch(url, {
+        method: 'DELETE', // Specify the HTTP method
+        headers: {
+            'Content-Type': 'application/json' // Tell the server you're sending JSON
+        },
+        body: JSON.stringify(deleteSlug) // Convert the JS object into a JSON string
+        });
+
+        // Handle the server's response
+        if (res.ok) {
+            const newConfirmedRedirect = await res.json();
+            console.log('Success:', newConfirmedRedirect);
+
+            
+        } else {
+            console.error('Server error:', res.status);
+        }
+    } catch (error) {
+        // Handle network errors or issues with the fetch itself
+        console.error('Network error:', error);
+    }
+
+}

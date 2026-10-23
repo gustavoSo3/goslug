@@ -6,7 +6,8 @@ import (
 	"url-shortener/api/configs/types"
 )
 
-func AdminHandler(w http.ResponseWriter, req *http.Request) {
+// /admin
+func Admin(w http.ResponseWriter, req *http.Request) {
 	tmpl, _ := template.ParseFiles("website/admin.html")
 
 	adminData := types.SampleAdminData

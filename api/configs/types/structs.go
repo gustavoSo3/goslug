@@ -8,7 +8,7 @@ import (
 // Use to store basic redirec data, like a small description and 2 urls. The "slug" that we had, and the Destination
 type Redirect struct {
 	Description string
-	Slug        template.URL
+	Slug        string
 	Destination template.URL
 }
 
@@ -21,7 +21,7 @@ type AdminData struct {
 
 // //Sample data
 
-// TODO: NOTE  I might have to change slug to start with out the / root TBD
+// NOTE: Slugs must be saved with the  "/" root slash. e.g. "/linkedin"
 var SampleAdminData AdminData = AdminData{
 	Redirects: []Redirect{
 		{
