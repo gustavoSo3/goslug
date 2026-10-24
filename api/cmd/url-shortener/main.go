@@ -11,7 +11,7 @@ func main() {
 	printMenu()
 
 	http.HandleFunc("/", handlers.Redirect)
-	fmt.Println("listening\t/* and redirecting")
+	fmt.Println("listening\t/ and redirecting")
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("website/public"))))
 	fmt.Println("setting\t\t/public")
@@ -20,7 +20,7 @@ func main() {
 	fmt.Println("listening\t/admin")
 
 	http.HandleFunc("/api/redirects", api.ApiRedirects)
-	fmt.Println("listening\t/api/create-redirect")
+	fmt.Println("listening\t/api/redirects ", "POST, DELETE")
 
 	fmt.Println("Server up at: http://localhost:8080\n\n")
 	http.ListenAndServe(":8080", nil)

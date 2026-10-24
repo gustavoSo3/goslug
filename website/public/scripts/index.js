@@ -56,30 +56,30 @@ async function deleteRedirect(slug) {
 
     console.log(deleteSlug);
 
+    if (confirm(`Are you shure you want to delete the slug: "${slug}"`)){
+        try {
+            // Make the DELETE request to /api/redirects
+            const res = await fetch(url, {
+            method: 'DELETE', // Specify the HTTP method
+            headers: {
+                'Content-Type': 'application/json' // Tell the server you're sending JSON
+            },
+            body: JSON.stringify(deleteSlug) // Convert the JS object into a JSON string
+            });
 
-    try {
-        // Make the DELETE request to /api/redirects
-        const res = await fetch(url, {
-        method: 'DELETE', // Specify the HTTP method
-        headers: {
-            'Content-Type': 'application/json' // Tell the server you're sending JSON
-        },
-        body: JSON.stringify(deleteSlug) // Convert the JS object into a JSON string
-        });
+            // Handle the server's response
+            if (res.ok) {
+                const newConfirmedRedirect = await res.body;
+                console.log('Success:', newConfirmedRedirect);
+                location.reload();
 
-        // Handle the server's response
-        if (res.ok) {
-            const newConfirmedRedirect = await res.body;
-            console.log('Success:', newConfirmedRedirect);
-            location.reload();
-
-            
-        } else {
-            console.error('Server error:', res.status);
+                
+            } else {
+                console.error('Server error:', res.status);
+            }
+        } catch (error) {
+            // Handle network errors or issues with the fetch itself
+            console.error('Network error:', error);
         }
-    } catch (error) {
-        // Handle network errors or issues with the fetch itself
-        console.error('Network error:', error);
     }
-
 }
