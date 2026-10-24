@@ -3,12 +3,21 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"url-shortener/api/internal/handlers"
 	"url-shortener/api/internal/handlers/api"
 )
 
 func main() {
-	var PORT string = ":8080"
+
+	var PORT string
+
+	envPort, exist := os.LookupEnv("PORT")
+	if exist {
+		PORT = envPort
+	} else {
+		PORT = ":8080"
+	}
 
 	printMenu()
 
