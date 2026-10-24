@@ -1,56 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/jpg" href="/public/favicon.svg">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
+
     <title>Admin Console</title>
 
 </head>
 <body>
-    <header>
-        <h1>Admin Console</h1>
-        <img src="public/profile.jpg" alt="Profile Image" width="100px">    
+    <header class="container my-3 mb-10">
+        <div class="d-flex justify-content-between align-items-center">
+            
+            <!-- Left Side: Logo + Title -->
+            <div class="d-flex align-items-center gap-3">
+                <img src="public/favicon.svg" alt="url-redirect Logo" width="50" height="50">
+                <h1 class="h3 mb-0">Admin Console</h1>
+            </div>
+
+            <!-- Right Side: Profile Image -->
+            <a href="#" class="d-inline-block">
+                <img src="public/profile.jpg" alt="Profile Image" class="rounded-circle" width="45" height="45" style="object-fit: cover;">
+            </a>
+
+        </div>
     </header>
+
+
     
-    <div>
-        <div id="create-redirect-form">
-            <div>
-                <label for="new-description">Description</label>
-                <input type="text" id="new-description" placeholder="Enter Redirect Description"></input>
+    <!-- New Slug Input Form -->
+    <div class="container mb-10">
+        <div class="d-flex flex-column justify-content-evenly align-items-center gap-3">
+            <div id="create-redirect-form" class="d-flex justify-content-evenly align-items-center gap-3">
+
+                <div class="input-group">
+                    <label for="new-description" class="input-group-text">Description</label>
+                    <input type="text" id="new-description" placeholder="Enter Redirect Description" class="form-control"></input>
+                </div>
+                
+                <div class="input-group">
+                    <label for="new-slug" class="input-group-text">Slug /</label>
+                    <input type="text" id="new-slug" placeholder="Enter Slug" class="form-control"></input>
+                </div>
+                
+                <div class="input-group">
+                    <label for="new-destination" class="input-group-text">Destination URL</label>
+                    <input type="url" id="new-destination" placeholder="Enter Destination URL" class="form-control"></input>
+                </div>
             </div>
-            <div>
-                <label for="new-slug">Slug /</label>
-                <input type="text" id="new-slug" placeholder="Enter Slug"></input>
-            </div>
-            <div>
-                <label for="new-destination">Destination URL</label>
-                <input type="url" id="new-destination" placeholder="Enter Destination URL"></input>
-            </div>
-            <button id="submit-new-redirect">Add Redirect</button>
-        </form>
+            <button id="submit-new-redirect" class="theme-primary btn-solid">Add Redirect</button>
+        </div>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Description</th>
-                <th>Slug</th>
-                <th>Destination</th>
-            </tr>
-        </thead>
-        <tbody id="redirects-table-body">
-            {{range .Redirects}}
-            <tr>
-                <td>{{.Description}}</td>
-                <td><a href="{{.Slug}}"><span style="color: gray;">{{$.Host}}</span>{{.Slug}}</a></td>
-                <td><a href="{{.Destination}}">{{.Destination}}</a></td>
-                <td><button onclick="deleteRedirect('{{.Slug}}')">delete</button></td>
-            </tr>
-            {{end}}
-        </tbody>
+    <div class="container">
+        <table class="table">
+            <thead>
+                <tr >
+                    <th scope="col">Description</th>
+                    <th scope="col">Slug</th>
+                    <th scope="col">Destination</th>
+                    <th scope="col">Delete Redirect</th>
+                </tr>
+            </thead>
+            <tbody id="redirects-table-body">
+                {{range .Redirects}}
+                <tr>
+                    <td>{{.Description}}</td>
+                    <td><a href="{{.Slug}}"><span style="color: gray;">{{$.Host}}</span>{{.Slug}}</a></td>
+                    <td><a href="{{.Destination}}">{{.Destination}}</a></td>
+                    <td><button onclick="deleteRedirect('{{.Slug}}')" class="theme-danger btn-outline">delete</button></td>
+                </tr>
+                {{end}}
+            </tbody>
 
-    </table>
+        </table>
+    </div>
 
     <script src="/public/scripts/index.js"></script>
 </body>

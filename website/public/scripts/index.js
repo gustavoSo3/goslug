@@ -36,6 +36,10 @@ subBtn.addEventListener("click", async () => {
             const newConfirmedRedirect = await res.json();
             console.log('Success:', newConfirmedRedirect);
 
+            newRedirectDescription.value = "";
+            newRedirectSlug.value = "";
+            newRedirectDestination.value = "";
+
             location.reload();
             
 
@@ -50,7 +54,6 @@ subBtn.addEventListener("click", async () => {
 
 
 async function deleteRedirect(slug) {
-
 
     const deleteSlug = slug
 
