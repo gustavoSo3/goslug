@@ -8,6 +8,8 @@ import (
 )
 
 func main() {
+	var PORT string = ":8080"
+
 	printMenu()
 
 	http.HandleFunc("/", handlers.Redirect)
@@ -22,8 +24,8 @@ func main() {
 	http.HandleFunc("/api/redirects", api.ApiRedirects)
 	fmt.Println("listening\t/api/redirects ", "POST, DELETE")
 
-	fmt.Println("Server up at: http://localhost:8080\n\n")
-	http.ListenAndServe(":8080", nil)
+	fmt.Println("Server up at: http://localhost" + PORT + "\n\n")
+	http.ListenAndServe(PORT, nil)
 
 }
 
