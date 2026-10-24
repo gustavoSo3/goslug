@@ -52,9 +52,7 @@ subBtn.addEventListener("click", async () => {
 async function deleteRedirect(slug) {
 
 
-    const deleteSlug = {
-        Slug: slug,
-    };
+    const deleteSlug = slug
 
     console.log(deleteSlug);
 
@@ -71,8 +69,9 @@ async function deleteRedirect(slug) {
 
         // Handle the server's response
         if (res.ok) {
-            const newConfirmedRedirect = await res.json();
+            const newConfirmedRedirect = await res.body;
             console.log('Success:', newConfirmedRedirect);
+            location.reload();
 
             
         } else {

@@ -19,7 +19,7 @@ func main() {
 	http.HandleFunc("/admin", handlers.Admin)
 	fmt.Println("listening\t/admin")
 
-	http.HandleFunc("/api/redirects", api.Redirect)
+	http.HandleFunc("/api/redirects", api.ApiRedirects)
 	fmt.Println("listening\t/api/create-redirect")
 
 	fmt.Println("Server up at: http://localhost:8080\n\n")
