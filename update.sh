@@ -8,4 +8,4 @@ docker build -t urlshortener .
 docker stop url-shortener
 docker rm url-shortener
 
-docker run -d --name url-shortener urlshortener:latest
+docker run -d -p 8080:8080 --name url-shortener urlshortener:latest
