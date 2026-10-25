@@ -45,5 +45,5 @@ var SampleAdminData AdminData = AdminData{
 			Destination: "https://www.linkedin.com/in/gustavoso3",
 		},
 	},
-	Host: "localhost:8080",
+	Host: "",
 }
