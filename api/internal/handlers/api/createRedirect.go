@@ -3,9 +3,9 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"goslug/api/configs/types"
 	"net/http"
 	"slices"
-	"url-shortener/api/configs/types"
 )
 
 // /api/redirects

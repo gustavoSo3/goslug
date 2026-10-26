@@ -1,5 +1,4 @@
-url-shortener
-
+GoSlug
 
 TODO:
 

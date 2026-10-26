@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"goslug/api/configs/types"
 	"html/template"
 	"net/http"
-	"url-shortener/api/configs/types"
 )
 
 // /admin
