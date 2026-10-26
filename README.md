@@ -7,10 +7,6 @@ TODO:
     * [ ] Slug must not contain spaces
     * [ ] limit description to 100 chrs and slug to 20 and destination to max URL size
 
-* [x] If enter pressed send new redirect 
-
-* [x] Dark/Light mode toggle
-
 * [ ] Have persistan storage
     * maybe use Firestore
     * Maybe 10 most hit on memory and rest on storage?
@@ -18,4 +14,6 @@ TODO:
 * [ ] User accounts? maybe just the admin, and on first set up must change??
     * Authentication should be a must before sharing or deployin more
 
-* [ ] Better Loggin Of Data
+* [ ] Better Loggin Of runn time logs
+
+* [x] Created simple Wellcome page

@@ -9,7 +9,7 @@ import (
 // /admin
 func Admin(w http.ResponseWriter, req *http.Request) {
 
-	tmpl, _ := template.ParseFiles("website/admin.html")
+	tmpl, _ := template.ParseFiles("website/templates/admin.html")
 
 	adminData := types.SampleAdminData
 

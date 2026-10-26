@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"fmt"
+	"html/template"
 	"net/http"
 	"url-shortener/api/configs/types"
 )
@@ -18,11 +19,12 @@ func Redirect(w http.ResponseWriter, req *http.Request) {
 
 	// If going to root just redirect to admin
 	// TODO: Maybe later a welcome page?
-	// if req.URL.Path == "/" {
-	// 	fmt.Println("\t\t->\t\t/admin : root")
-	// 	http.Redirect(w, req, "/admin", http.StatusFound)
-	// 	return
-	// }
+	if req.URL.Path == "/" {
+		tmpl, _ := template.ParseFiles("website/templates/home-page.html")
+		const homePage string = "Home Page"
+		tmpl.ExecuteTemplate(w, "home-page.html", homePage)
+		return
+	}
 
 	// Search for rediredirect slug match
 	for _, v := range types.SampleAdminData.Redirects {
