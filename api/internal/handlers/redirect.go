@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"goslug/api/configs/types"
+	"goslug/api/internal/database"
 	"html/template"
 	"net/http"
 )
@@ -17,8 +17,7 @@ func Redirect(w http.ResponseWriter, req *http.Request) {
 
 	fmt.Print("Redirecting:\t\t", req.URL.Path)
 
-	// If going to root just redirect to admin
-	// TODO: Maybe later a welcome page?
+	// If going to root just redirect Wellcome Page
 	if req.URL.Path == "/" {
 		tmpl, _ := template.ParseFiles("website/templates/home-page.html")
 		const homePage string = "Home Page"
@@ -27,7 +26,8 @@ func Redirect(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// Search for rediredirect slug match
-	for _, v := range types.SampleAdminData.Redirects {
+	redirects, _ := database.RedirectDB.GetRedirects()
+	for _, v := range redirects {
 		if v.Slug == req.URL.Path {
 			fmt.Println("\t\t->\t\t", string(v.Destination))
 			http.Redirect(w, req, string(v.Destination), http.StatusFound)

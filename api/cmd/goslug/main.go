@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"goslug/api/internal/database"
 	"goslug/api/internal/handlers"
 	"goslug/api/internal/handlers/api"
 	"net/http"
@@ -30,6 +31,12 @@ func main() {
 
 	printMenu()
 
+	// Initialize DB In Memory
+	var memoryDB *database.MemoryStorage = &database.MemoryStorage{}
+	memoryDB.Load()
+	database.RedirectDB = memoryDB
+
+	// Set endpoints
 	http.HandleFunc("/", handlers.Redirect)
 	fmt.Println("listening\t/ and redirecting")
 

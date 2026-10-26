@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"goslug/api/configs/types"
+	"goslug/api/internal/database"
 	"html/template"
 	"net/http"
 )
@@ -11,7 +12,10 @@ func Admin(w http.ResponseWriter, req *http.Request) {
 
 	tmpl, _ := template.ParseFiles("website/templates/admin.html")
 
-	adminData := types.SampleAdminData
+	redirects, _ := database.RedirectDB.GetRedirects()
+	adminData := types.AdminData{
+		Redirects: redirects,
+	}
 
 	tmpl.ExecuteTemplate(w, "admin.html", adminData)
 

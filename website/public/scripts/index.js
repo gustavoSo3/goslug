@@ -22,7 +22,7 @@ async function postNewRedirect(){
     const newRedirectSlug = document.getElementById("new-slug");
     const newRedirectDestination = document.getElementById("new-destination");
 
-    if( newRedirectDescription == "" || newRedirectSlug == "" || newRedirectDestination == ""){
+    if( newRedirectDescription.value === "" || newRedirectSlug.value === "" || newRedirectDestination.value === ""){
         return
     }
     const newRedirect = {
