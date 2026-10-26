@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
+	"goslug/api/internal/handlers"
+	"goslug/api/internal/handlers/api"
 	"net/http"
 	"os"
-	"url-shortener/api/internal/handlers"
-	"url-shortener/api/internal/handlers/api"
 )
 
 func main() {
