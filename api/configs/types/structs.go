@@ -16,7 +16,6 @@ type Redirect struct {
 // AdminData struct stores the information that is needed to compile the admin.html template
 type AdminData struct {
 	Redirects []Redirect
-	Host      string
 }
 
 // //Sample data
@@ -25,8 +24,8 @@ type AdminData struct {
 var SampleAdminData AdminData = AdminData{
 	Redirects: []Redirect{
 		{
-			Description: "first_redirect",
-			Slug:        "/linkedin",
+			Description: "To my linkedin",
+			Slug:        "/lin",
 			Destination: "https://www.linkedin.com/in/gustavoso3",
 		},
 		{
@@ -35,15 +34,14 @@ var SampleAdminData AdminData = AdminData{
 			Destination: "https://github.com/gustavoSo3",
 		},
 		{
-			Description: "togoogle",
-			Slug:        "/ggl",
-			Destination: "https://www.google.com",
-		},
-		{
 			Description: "youtubet",
 			Slug:        "/yt",
 			Destination: "https://www.linkedin.com/in/gustavoso3",
 		},
+		{
+			Description: "To my CV",
+			Slug:        "/cv",
+			Destination: "https://storage.googleapis.com/resume_sotres_dev/gustavo_sotres_oct_2026.pdf",
+		},
 	},
-	Host: "",
 }

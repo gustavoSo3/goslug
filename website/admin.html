@@ -8,7 +8,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
     <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
 
-    <title>Admin Console</title>
+    <title>GoSlug</title>
 
 </head>
 <body>
@@ -18,7 +18,7 @@
             <!-- Left Side: Logo + Title -->
             <div class="d-flex align-items-center gap-3">
                 <img src="public/favicon.svg" alt="url-redirect Logo" width="50" height="50">
-                <h1 class="h3 mb-0">Admin Console</h1>
+                <h1 class="h3 mb-0">GoSlug Admin Console</h1>
             </div>
 
             <!-- Right Side: Profile Image -->
@@ -33,29 +33,29 @@
     
     <!-- New Slug Input Form -->
     <div class="container mb-10">
-        <div class="d-flex flex-column justify-content-evenly align-items-center gap-3">
-            <div id="create-redirect-form" class="d-flex flex-column justify-content-evenly align-items-center gap-3 md:flex-row">
+        <div class="d-flex flex-column justify-content-evenly align-items-center gap-3 ">
+            <div id="create-redirect-form" class="d-flex flex-column justify-content-evenly align-items-center gap-3 xl:flex-row w-100">
 
-                <div class="input-group">
+                <div class="input-group ">
                     <label for="new-description" class="input-group-text">Description</label>
-                    <input type="text" id="new-description" placeholder="Enter Redirect Description" class="form-control"></input>
+                    <input type="text" id="new-description" placeholder="e.g., To Google" class="form-control"></input>
                 </div>
                 
                 <div class="input-group">
                     <label for="new-slug" class="input-group-text">Slug /</label>
-                    <input type="text" id="new-slug" placeholder="Enter Slug" class="form-control"></input>
+                    <input type="text" id="new-slug" placeholder="e.g., ggl" class="form-control"></input>
                 </div>
                 
                 <div class="input-group">
                     <label for="new-destination" class="input-group-text">Destination URL</label>
-                    <input type="url" id="new-destination" placeholder="Enter Destination URL" class="form-control"></input>
+                    <input type="url" id="new-destination" placeholder="e.g., https://google.com" class="form-control"></input>
                 </div>
             </div>
-            <button id="submit-new-redirect" class="theme-primary btn-solid">Add Redirect</button>
+            <button id="submit-new-redirect" class="theme-primary btn-solid w-100">Add Redirect</button>
         </div>
     </div>
 
-    <div class="container">
+    <div class="container d-none md:d-block">
         <table class="table">
             <thead>
                 <tr >
@@ -68,15 +68,40 @@
             <tbody id="redirects-table-body">
                 {{range .Redirects}}
                 <tr>
-                    <td>{{.Description}}</td>
-                    <td><a href="{{.Slug}}"><span style="color: gray;">{{$.Host}}</span>{{.Slug}}</a></td>
+                    <td><a href="{{.Slug}}">{{.Slug}}</a></td>
                     <td><a href="{{.Destination}}">{{.Destination}}</a></td>
+                    <td>{{.Description}}</td>
                     <td><button onclick="deleteRedirect('{{.Slug}}')" class="theme-danger btn-outline">delete</button></td>
                 </tr>
                 {{end}}
             </tbody>
 
         </table>
+    </div>
+
+    <div class="container d-flex flex-column justify-content-start align-items-center md:d-none gap-3">
+
+        {{range .Redirects}}
+        
+        <div class="w-100 d-flex justify-content-between align-items-center border rounded-5">
+            <div class="p-5">
+                <div class="h3">
+                    <a href="{{.Slug}}">{{.Slug}}</a>
+                </div>
+                <div>
+                    <a href="{{.Destination}}">{{.Destination}}</a>
+                </div>
+                <p>
+                    {{.Description}}
+                </p>
+            </div>
+            <div class="p-5">
+                <button onclick="deleteRedirect('{{.Slug}}')" class="theme-danger btn-outline">delete</button>
+            </div>
+        </div>
+
+        {{end}}
+
     </div>
 
     <script src="/public/scripts/index.js"></script>

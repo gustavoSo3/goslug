@@ -8,9 +8,26 @@ const url = "/api/redirects";
 
 subBtn.addEventListener("click", async () => {
 
+    await postNewRedirect();
+
+});
+
+document.addEventListener("keydown", async (event) => {
+    if(event.key === "Enter"){
+        await postNewRedirect();
+    }
+});
+
+
+async function postNewRedirect(){
+
     const newRedirectDescription = document.getElementById("new-description");
     const newRedirectSlug = document.getElementById("new-slug");
     const newRedirectDestination = document.getElementById("new-destination");
+
+    if( newRedirectDescription == "" || newRedirectSlug == "" || newRedirectDestination == ""){
+        return
+    }
 
     const newRedirect = {
         Description: newRedirectDescription.value,
@@ -19,7 +36,6 @@ subBtn.addEventListener("click", async () => {
     };
 
     console.log(newRedirect);
-
 
     try {
         // Make the POST request to /api/redirects
@@ -50,8 +66,7 @@ subBtn.addEventListener("click", async () => {
         // Handle network errors or issues with the fetch itself
         console.error('Network error:', error);
     }
-});
-
+};
 
 async function deleteRedirect(slug) {
 

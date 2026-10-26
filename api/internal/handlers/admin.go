@@ -13,10 +13,6 @@ func Admin(w http.ResponseWriter, req *http.Request) {
 
 	adminData := types.SampleAdminData
 
-	if types.SampleAdminData.Host == "" {
-		types.SampleAdminData.Host = "https://short.sotres.dev"
-	}
-
 	tmpl.ExecuteTemplate(w, "admin.html", adminData)
 
 }
