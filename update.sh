@@ -3,7 +3,7 @@ cd ~/goslug
 git fetch --all
 git reset --hard origin/main
 
-docker build -t urlshortener .
+docker build -t goslug .
 
 docker stop goslug
 docker rm goslug
