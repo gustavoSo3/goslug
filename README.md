@@ -9,7 +9,7 @@ TODO:
 
 * [x] If enter pressed send new redirect 
 
-* [ ] Dark/Light mode toggle
+* [x] Dark/Light mode toggle
 
 * [ ] Have persistan storage
     * maybe use Firestore
@@ -17,3 +17,5 @@ TODO:
 
 * [ ] User accounts? maybe just the admin, and on first set up must change??
     * Authentication should be a must before sharing or deployin more
+
+* [ ] Better Loggin Of Data

@@ -1,4 +1,4 @@
-FROM golang:1.27
+FROM golang:1.27-alpine
 
 WORKDIR /url-shortener
 

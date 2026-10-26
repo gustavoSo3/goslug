@@ -2,14 +2,12 @@
 
 
 const subBtn = document.getElementById("submit-new-redirect");
+const toggleBtn = document.getElementById("color-mode-toggle");
 
-
-const url = "/api/redirects";
+const apiRedirectURL = "/api/redirects";
 
 subBtn.addEventListener("click", async () => {
-
     await postNewRedirect();
-
 });
 
 document.addEventListener("keydown", async (event) => {
@@ -18,6 +16,14 @@ document.addEventListener("keydown", async (event) => {
     }
 });
 
+toggleBtn.addEventListener("click",()=>{
+    if (document.documentElement.getAttribute("data-bs-theme") == "dark") {
+        document.documentElement.setAttribute("data-bs-theme","light")
+    }
+    else {
+        document.documentElement.setAttribute("data-bs-theme", "dark")
+    }
+})
 
 async function postNewRedirect(){
 
@@ -28,7 +34,6 @@ async function postNewRedirect(){
     if( newRedirectDescription == "" || newRedirectSlug == "" || newRedirectDestination == ""){
         return
     }
-
     const newRedirect = {
         Description: newRedirectDescription.value,
         Slug: "/" + newRedirectSlug.value,
@@ -39,7 +44,7 @@ async function postNewRedirect(){
 
     try {
         // Make the POST request to /api/redirects
-        const res = await fetch(url, {
+        const res = await fetch(apiRedirectURL, {
         method: 'POST', // Specify the HTTP method
         headers: {
             'Content-Type': 'application/json' // Tell the server you're sending JSON
@@ -77,7 +82,7 @@ async function deleteRedirect(slug) {
     if (confirm(`Are you shure you want to delete the slug: "${slug}"`)){
         try {
             // Make the DELETE request to /api/redirects
-            const res = await fetch(url, {
+            const res = await fetch(apiRedirectURL, {
             method: 'DELETE', // Specify the HTTP method
             headers: {
                 'Content-Type': 'application/json' // Tell the server you're sending JSON
@@ -100,4 +105,4 @@ async function deleteRedirect(slug) {
             console.error('Network error:', error);
         }
     }
-}
+};

@@ -25,7 +25,8 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 			if isSlugUnique(newRedirect.Slug) {
 				fmt.Print("\tUnique Slug\t")
 
-				// add it to the storage. ATP using just local mememory, TODO: this will be a write to the db later
+				// add it to the storage. ATP using just local mememory
+				// TODO: This needs to be done in the DB
 				types.SampleAdminData.Redirects = append(types.SampleAdminData.Redirects, newRedirect)
 
 				fmt.Println("Redirect Saved")
@@ -48,6 +49,7 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 			http.Error(w, "Bad Redirect Data", http.StatusBadRequest)
 		}
 
+	//IF its DELETE
 	case "DELETE":
 		// Decoding body
 		var slugToDelete string
@@ -58,6 +60,7 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 		for i, v := range types.SampleAdminData.Redirects {
 			if slugToDelete == v.Slug {
 				// If found delete and return the slug deleted
+				// TODO: This needs to be done in the DB
 				types.SampleAdminData.Redirects = slices.Delete(types.SampleAdminData.Redirects, i, i+1)
 
 				fmt.Println("\tDELETED")

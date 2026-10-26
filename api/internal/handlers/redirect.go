@@ -34,6 +34,6 @@ func Redirect(w http.ResponseWriter, req *http.Request) {
 	}
 
 	// If no matches at the moment return to admin or do a 404 bad request
-	fmt.Println("\t\t->\t\t/admin : Invalid Slug")
+	fmt.Println("\t\t->\t\t404 : Invalid Slug")
 	http.Error(w, "Slug not in database", http.StatusNotFound)
 }
