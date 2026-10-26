@@ -1,0 +1,16 @@
+[Unit]
+Description=Goslug Go HTTP Server
+After=network.target
+
+[Service]
+Type=simple
+User=gus_sotres
+WorkingDirectory=/home/gus_sotres/goslug
+ExecStart=/home/gus_sotres/goslug/bin/main
+Restart=always
+RestartSec=5s
+# Optional: environment variables if your app needs them
+# Environment=PORT=8080
+
+[Install]
+WantedBy=multi-user.target
