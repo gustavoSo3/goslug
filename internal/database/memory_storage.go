@@ -3,7 +3,7 @@ package database
 import (
 	"errors"
 	"fmt"
-	"goslug/api/configs/types"
+	"goslug/configs/types"
 	"slices"
 )
 

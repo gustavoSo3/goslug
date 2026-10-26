@@ -3,8 +3,8 @@ package api
 import (
 	"encoding/json"
 	"fmt"
-	"goslug/api/configs/types"
-	"goslug/api/internal/database"
+	"goslug/configs/types"
+	"goslug/internal/database"
 	"net/http"
 )
 

@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
-	"goslug/api/internal/database"
-	"goslug/api/internal/handlers"
-	"goslug/api/internal/handlers/api"
+	"goslug/internal/database"
+	"goslug/internal/handlers"
+	"goslug/internal/handlers/api"
 	"net/http"
 	"os"
 )

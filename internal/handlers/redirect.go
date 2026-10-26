@@ -2,7 +2,7 @@ package handlers
 
 import (
 	"fmt"
-	"goslug/api/internal/database"
+	"goslug/internal/database"
 	"html/template"
 	"net/http"
 )

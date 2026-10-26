@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"goslug/api/configs/types"
-	"goslug/api/internal/database"
+	"goslug/configs/types"
+	"goslug/internal/database"
 	"html/template"
 	"net/http"
 )

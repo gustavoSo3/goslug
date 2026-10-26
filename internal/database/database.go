@@ -1,6 +1,6 @@
 package database
 
-import "goslug/api/configs/types"
+import "goslug/configs/types"
 
 type DataBase interface {
 	Load() error
