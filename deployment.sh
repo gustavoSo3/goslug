@@ -2,6 +2,8 @@ cd ~/goslug
 
 git pull origin main
 
+sh ./build.sh
+
 sudo cp ~/goslug/goslug.service /etc/systemd/system/goslug.service
 
 sudo systemctl daemon-reload
