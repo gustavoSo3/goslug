@@ -67,14 +67,15 @@
         </div>
     </div>
 
+    <!--Desktop-->
     <div class="container d-none md:d-block">
         <table class="table">
             <thead>
                 <tr >
-                    <th scope="col">Description</th>
                     <th scope="col">Slug</th>
                     <th scope="col">Destination</th>
-                    <th scope="col">Delete Redirect</th>
+                    <th scope="col">Description</th>
+                    <th scope="col" class="text-center">Delete Redirect</th>
                 </tr>
             </thead>
             <tbody id="redirects-table-body">
@@ -83,7 +84,7 @@
                     <td><a href="{{.Slug}}">{{.Slug}}</a></td>
                     <td><a href="{{.Destination}}">{{.Destination}}</a></td>
                     <td>{{.Description}}</td>
-                    <td><button onclick="deleteRedirect('{{.Slug}}')" class="theme-danger btn-outline">delete</button></td>
+                    <td class="text-center"><button onclick="deleteRedirect('{{.Slug}}')" class="theme-danger btn-outline">delete</button></td>
                 </tr>
                 {{end}}
             </tbody>
@@ -91,6 +92,7 @@
         </table>
     </div>
 
+    <!--Mobile-->
     <div class="container d-flex flex-column justify-content-start align-items-center md:d-none gap-3">
 
         {{range .Redirects}}
