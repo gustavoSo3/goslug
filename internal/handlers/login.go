@@ -20,7 +20,7 @@ func Login(w http.ResponseWriter, req *http.Request) {
 	case "GET":
 		// If im authenticated then just redirect to admin
 		if err == nil && authCookie.Value == credentials.AUTH_KEY {
-			http.Redirect(w, req, "/admin", http.StatusAccepted)
+			http.Redirect(w, req, "/admin", http.StatusFound)
 			return
 		}
 
