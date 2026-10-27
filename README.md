@@ -27,4 +27,4 @@ TODO:
 
 * [x] Better Loggin Of runn time logs
 
-* [x] Created simple Wellcome page
+* [x] Created simple Welcome page

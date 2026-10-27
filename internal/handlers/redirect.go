@@ -31,7 +31,7 @@ func Redirect(w http.ResponseWriter, req *http.Request) {
 	// If no matches at the moment return welcome page
 	tmpl, _ := template.ParseFiles("website/templates/home-page.html")
 
-	logger.Log(req.URL.Path + " Slug not database serving Wellcome Page")
+	logger.Log(req.URL.Path + " Slug not database serving Welcome Page")
 	tmpl.ExecuteTemplate(w, "home-page.html", nil)
 
 }
