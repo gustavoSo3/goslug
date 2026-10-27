@@ -19,9 +19,12 @@ TODO:
     * [ ] localfile storage
     * [ ] remote db (firestore/mongodb)
 
-* [ ] User accounts? maybe just the admin, and on first set up must change??
-    * Authentication should be a must before sharing or deployin more
+* [x] User accounts? maybe just the admin, and on first set up must change??
+    * Authentication has USERNAME and PASSWORD env variables
+    * If not set will be just admin and password
+    * middlewear set so only authenticated can use /admin /api/slugs
+    * /login is the endpoint for all login operations
 
-* [ ] Better Loggin Of runn time logs
+* [x] Better Loggin Of runn time logs
 
 * [x] Created simple Wellcome page

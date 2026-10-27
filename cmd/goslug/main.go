@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"goslug/configs/credentials"
 	"goslug/internal/database"
 	"goslug/internal/handlers"
 	"goslug/internal/handlers/api"
+	"goslug/internal/logger"
 	"goslug/internal/middleware"
 	"net/http"
 	"os"
@@ -23,29 +23,35 @@ func main() {
 	credentials.AUTH_USERNAME = setEnv("USERNAME", "admin")
 	credentials.AUTH_PASSWORD = setEnv("PASSWORD", "password")
 
-	printMenu()
+	logger.PrintMenu()
 
 	// Initialize DB In Memory
 	var memoryDB *database.MemoryStorage = &database.MemoryStorage{}
-	memoryDB.Load()
+	err := memoryDB.Load()
+	if err != nil {
+		logger.Error("DATABASE Initialziation Dailed: " + err.Error())
+		os.Exit(1)
+	}
+
+	logger.Log("DATABASE Initialziation Success")
 	database.RedirectDB = memoryDB
 
-	// Set endpoints
-	http.HandleFunc("/", handlers.Redirect)
-	fmt.Println("listening\t/ and redirecting")
-
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("website/public"))))
-	fmt.Println("setting\t\t/public")
+	logger.Log("SERVING_STATIC_FILES on /public")
+
+	http.HandleFunc("/", handlers.Redirect)
+	logger.Log("LISTENING on /", "METHODS: GET")
 
 	http.HandleFunc("/login", handlers.Login)
+	logger.Log("LISTENING on /login", " METHODS: GET, POST, DELETE")
 
 	http.HandleFunc("/admin", middleware.RequireAuth(handlers.Admin))
-	fmt.Println("listening\t/admin", "GET, POST, DELETE")
+	logger.Log("LISTENING on /admin", "METHODS: GET", "MIDDLEWARE: RequireAuth")
 
 	http.HandleFunc("/api/redirects", middleware.RequireAuth(api.ApiRedirects))
-	fmt.Println("listening\t/api/redirects ", "POST, DELETE")
+	logger.Log("LISTENING on /api/redirects", "METHODS: POST, DELETE", "MIDDLEWARE: RequireAuth")
 
-	fmt.Println("Server up at: http://" + HOST + PORT + "\n\n")
+	logger.Log("SERVER_UP at http://" + HOST + PORT)
 	http.ListenAndServe(HOST+PORT, nil)
 
 }
@@ -53,16 +59,10 @@ func main() {
 func setEnv(variable string, def string) string {
 	env, exist := os.LookupEnv(variable)
 	if exist {
+		logger.Log("ENV_FOUND " + variable + ":" + env)
 		return env
 	}
-	return def
-}
 
-func printMenu() {
-	fmt.Print("===========================================\n")
-	fmt.Print("GoSlug\n")
-	fmt.Print("Wellcome\n")
-	fmt.Print("https://github.com/gustavoSo3/goslug\n")
-	fmt.Print("v0.1\n")
-	fmt.Print("===========================================\n")
+	logger.Log("ENV_NOT_FOUND::USING_DEFAULT " + variable + ":" + def)
+	return def
 }

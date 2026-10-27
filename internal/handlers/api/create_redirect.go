@@ -2,10 +2,10 @@ package api
 
 import (
 	"encoding/json"
-	"fmt"
 	"goslug/configs/enums"
 	"goslug/configs/types"
 	"goslug/internal/database"
+	"goslug/internal/logger"
 	"net/http"
 )
 
@@ -18,7 +18,7 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 		// Decoding body
 		var newRedirect types.Redirect
 		json.NewDecoder(req.Body).Decode(&newRedirect)
-		fmt.Print("New Redirect: ", newRedirect)
+		logger.Log("NEW_REDIRECT ", newRedirect.Slug, " ", newRedirect.Destination, " ", newRedirect.Description)
 
 		//Add Redirect
 		err := database.RedirectDB.AddRedirect(newRedirect)
@@ -27,44 +27,37 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 
 			case enums.ERRORExistingSlug:
 				// Bad Redirect Data
-				fmt.Println("\tREQ:ERR Slug already exist\t")
-				http.Error(w, "Slug in use", http.StatusBadRequest)
+				logger.Log("NEW_REDIRECT Not created", enums.ERRORExistingSlug)
+				http.Error(w, enums.ERRORExistingSlug, http.StatusBadRequest)
 
 			case enums.ERRORBadRedirectData:
 				// Bad Redirect Data
-				fmt.Println("\tREQ:ERR BAD REDIRECT\t")
-				http.Error(w, "Bad Redirect Data", http.StatusBadRequest)
+				logger.Log("NEW_REDIRECT Not created", enums.ERRORBadRedirectData)
+				http.Error(w, enums.ERRORBadRedirectData, http.StatusBadRequest)
 
 			}
 			return
 		}
 
-		// Return confirmation of object reated if success
-		w.Header().Set("Content-Type", "application/json")
+		logger.Log("NEW_REDIRECT Created")
 		w.WriteHeader(http.StatusCreated)
-		json.NewEncoder(w).Encode(newRedirect)
 
-	//IF its DELETE
 	case "DELETE":
 		// Decoding body
 		var slugToDelete string
 		json.NewDecoder(req.Body).Decode(&slugToDelete)
-		fmt.Print("Dele Slug: ", slugToDelete)
+		logger.Log("DELETING_SLUG ", slugToDelete)
 
 		err := database.RedirectDB.RemoveRedirect(slugToDelete)
 		if err != nil {
 			// If Slug not found
-			fmt.Println("\tREQ:ERR SLUG not found\t")
-			http.Error(w, "Slug not found", http.StatusBadRequest)
-			http.NotFound(w, req)
-
+			logger.Log("DELETING_SLUG ", enums.ERRORNoMatchingSlug)
+			http.Error(w, enums.ERRORNoMatchingSlug, http.StatusBadRequest)
 			return
 		}
 
-		fmt.Println("\tDELETED")
-		w.Header().Set("Content-Type", "application/json")
+		logger.Log("DELETING_SLUG Deleted")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprint(w, slugToDelete)
 
 	}
 

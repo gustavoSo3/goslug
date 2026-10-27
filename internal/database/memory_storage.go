@@ -2,9 +2,9 @@ package database
 
 import (
 	"errors"
-	"fmt"
 	"goslug/configs/enums"
 	"goslug/configs/types"
+	"goslug/internal/logger"
 	"slices"
 )
 
@@ -14,6 +14,7 @@ type MemoryStorage struct {
 
 func (s *MemoryStorage) Load() error {
 	// Sample Data
+	logger.Log("MEMORY_STORAGE_LOAD", "Creating sample redirects")
 	s.redirects = []types.Redirect{
 		{
 			Description: "To my linkedin",
@@ -40,44 +41,49 @@ func (s *MemoryStorage) Load() error {
 }
 
 func (s *MemoryStorage) Save(redirects []types.Redirect) error {
+	logger.Log("MEMORY_STORAGE_SAVE", "Redirects saved")
 	return nil
 }
 
 func (s *MemoryStorage) AddRedirect(newRedirect types.Redirect) error {
+	logger.Log("MEMORY_STORAGE_NEW_REDIRECT", "Slug:", newRedirect.Slug)
 	if newRedirect.Description != "" && newRedirect.Slug != "" && newRedirect.Destination != "" {
-		fmt.Print("\tValid Redirect format\t")
+		logger.Log("MEMORY_STORAGE_NEW_REDIRECT", "Valid Format")
 
 		if isSlugUnique(newRedirect.Slug, s.redirects) {
-			fmt.Print("\tUnique Slug\t")
+			logger.Log("MEMORY_STORAGE_NEW_REDIRECT", "Slug Available")
 
 			// add it to the storage. ATP using just local mememory
 			s.redirects = append(s.redirects, newRedirect)
 
-			fmt.Println("Redirect Saved")
+			logger.Log("MEMORY_STORAGE_NEW_REDIRECT", "Saved")
 			return nil
 
 		} else {
 			// Slug already exist
-			fmt.Println("\tREQ:ERR SLUG ALREADY EXIST\t")
+			logger.Error("MEMORY_STORAGE_NEW_REDIRECT", enums.ERRORExistingSlug)
 			return errors.New(enums.ERRORExistingSlug)
 		}
 
 	} else {
 		// Bad Redirect Data
-		fmt.Println("\tREQ:ERR BAD REDIRECT\t")
+		logger.Error("MEMORY_STORAGE_NEW_REDIRECT", enums.ERRORBadRedirectData)
 		return errors.New(enums.ERRORBadRedirectData)
 	}
 }
 
 func (s *MemoryStorage) RemoveRedirect(slug string) error {
+	logger.Log("MEMORY_STORAGE_REMOVE_REDIRECT", "Slug:", slug)
+
 	for i, v := range s.redirects {
 		if slug == v.Slug {
 			s.redirects = slices.Delete(s.redirects, i, i+1)
 
-			fmt.Println("\tDELETED")
+			logger.Log("MEMORY_STORAGE_REMOVE_REDIRECT", "Removed")
 			return nil
 		}
 	}
+	logger.Error("MEMORY_STORAGE_REMOVE_REDIRECT", enums.ERRORNoMatchingSlug)
 	return errors.New(enums.ERRORNoMatchingSlug)
 }
 

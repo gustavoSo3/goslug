@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"fmt"
 	"goslug/internal/database"
+	"goslug/internal/logger"
 	"html/template"
 	"net/http"
 )
@@ -11,17 +11,9 @@ import (
 func Redirect(w http.ResponseWriter, req *http.Request) {
 
 	if req.Method != "GET" {
+
+		logger.Log(req.URL.Path + " " + req.Method + " not allowed")
 		http.NotFound(w, req)
-		return
-	}
-
-	fmt.Print("Redirecting:\t\t", req.URL.Path)
-
-	// If going to root just redirect Wellcome Page
-	if req.URL.Path == "/" {
-		tmpl, _ := template.ParseFiles("website/templates/home-page.html")
-		const homePage string = "Home Page"
-		tmpl.ExecuteTemplate(w, "home-page.html", homePage)
 		return
 	}
 
@@ -29,13 +21,17 @@ func Redirect(w http.ResponseWriter, req *http.Request) {
 	redirects, _ := database.RedirectDB.GetRedirects()
 	for _, v := range redirects {
 		if v.Slug == req.URL.Path {
-			fmt.Println("\t\t->\t\t", string(v.Destination))
-			http.Redirect(w, req, string(v.Destination), http.StatusFound)
+
+			logger.Log(req.URL.Path + " -> " + v.Destination)
+			http.Redirect(w, req, v.Destination, http.StatusSeeOther)
 			return
 		}
 	}
 
-	// If no matches at the moment return to admin or do a 404 bad request
-	fmt.Println("\t\t->\t\t404 : Invalid Slug")
-	http.Error(w, "Slug not in database", http.StatusNotFound)
+	// If no matches at the moment return welcome page
+	tmpl, _ := template.ParseFiles("website/templates/home-page.html")
+
+	logger.Log(req.URL.Path + " Slug not database serving Wellcome Page")
+	tmpl.ExecuteTemplate(w, "home-page.html", nil)
+
 }

@@ -4,9 +4,9 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
 	"goslug/configs/credentials"
 	"goslug/configs/types"
+	"goslug/internal/logger"
 	"html/template"
 	"net/http"
 	"time"
@@ -20,12 +20,15 @@ func Login(w http.ResponseWriter, req *http.Request) {
 	case "GET":
 		// If im authenticated then just redirect to admin
 		if err == nil && authCookie.Value == credentials.AUTH_KEY {
-			http.Redirect(w, req, "/admin", http.StatusFound)
+			logger.Log("Already authenticated redirecting to /admin")
+			http.Redirect(w, req, "/admin", http.StatusSeeOther)
 			return
 		}
 
 		//Otherwise return the login page
 		tmpl, _ := template.ParseFiles("website/templates/login.html")
+
+		logger.Log("Not authenticated serving Log In Page")
 		tmpl.ExecuteTemplate(w, "login.html", nil)
 
 	case "POST":
@@ -34,8 +37,9 @@ func Login(w http.ResponseWriter, req *http.Request) {
 
 		// Authenticated or not, i will give back a new auth cookie with 1 day of activity if credentials are rigth
 		if err == nil {
-			fmt.Print("username: " + logIn.Username + " password: " + logIn.Password)
+			logger.Log("AUTH_ATTEMPT", "username:", logIn.Username, "password:", logIn.Password)
 			if logIn.Username == credentials.AUTH_USERNAME && logIn.Password == credentials.AUTH_PASSWORD {
+				logger.Log("AUTH_ATTEMPT", "Valid credentials")
 
 				hash := sha256.New()
 				hash.Write([]byte(string(credentials.AUTH_USERNAME + credentials.AUTH_PASSWORD + time.Now().String())))
@@ -51,18 +55,24 @@ func Login(w http.ResponseWriter, req *http.Request) {
 					SameSite: http.SameSiteLaxMode,
 				}
 				http.SetCookie(w, authCookie)
-				w.WriteHeader(http.StatusAccepted)
+				w.WriteHeader(http.StatusCreated)
 
 			} else {
 				// IF we dont have valid credentials just repond with unautorized
+
+				logger.Log("AUTH_ATTEMPT", "FAILED Invalid credentials")
 				credentials.AUTH_KEY = "UNAUTORIZED"
+
 				w.WriteHeader(http.StatusUnauthorized)
 			}
 
 		}
 	case "DELETE":
 		// If autenticated sent a empty cookie with no value to clear session (logout)
+
 		if err == nil && authCookie.Value == credentials.AUTH_KEY {
+			logger.Log("AUTH_LOGGED_OUT")
+
 			authCookie = &http.Cookie{
 				Name:     "goslug_session",
 				Value:    "",
@@ -72,11 +82,14 @@ func Login(w http.ResponseWriter, req *http.Request) {
 				Secure:   true,
 				SameSite: http.SameSiteLaxMode,
 			}
+
 			http.SetCookie(w, authCookie)
+			//TODO: check response status
 			w.WriteHeader(http.StatusAccepted)
 
 		}
 	default:
+		//TODO: check response status
 		w.WriteHeader(http.StatusBadRequest)
 	}
 

@@ -1,13 +1,9 @@
 package types
 
-import (
-	"html/template"
-)
-
 type Redirect struct {
 	Description string
 	Slug        string
-	Destination template.URL
+	Destination string
 }
 
 type AdminData struct {
