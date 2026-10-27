@@ -1,4 +1,4 @@
-package types
+package enums
 
 const (
 	ERRORExistingSlug    string = "Slug already exist"

@@ -6,17 +6,17 @@ const subBtn = document.getElementById("submit-new-redirect");
 const apiRedirectURL = "/api/redirects";
 
 subBtn.addEventListener("click", async () => {
-    await postNewRedirect();
+    await postLogIn();
 });
 
 document.addEventListener("keydown", async (event) => {
     if(event.key === "Enter"){
-        await postNewRedirect();
+        await postLogIn();
     }
 });
 
 
-async function postNewRedirect(){
+async function postLogIn(){
 
     const newRedirectDescription = document.getElementById("new-description");
     const newRedirectSlug = document.getElementById("new-slug");

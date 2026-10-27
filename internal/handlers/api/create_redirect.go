@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"goslug/configs/enums"
 	"goslug/configs/types"
 	"goslug/internal/database"
 	"net/http"
@@ -24,12 +25,12 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 		if err != nil {
 			switch err.Error() {
 
-			case types.ERRORExistingSlug:
+			case enums.ERRORExistingSlug:
 				// Bad Redirect Data
 				fmt.Println("\tREQ:ERR Slug already exist\t")
 				http.Error(w, "Slug in use", http.StatusBadRequest)
 
-			case types.ERRORBadRedirectData:
+			case enums.ERRORBadRedirectData:
 				// Bad Redirect Data
 				fmt.Println("\tREQ:ERR BAD REDIRECT\t")
 				http.Error(w, "Bad Redirect Data", http.StatusBadRequest)

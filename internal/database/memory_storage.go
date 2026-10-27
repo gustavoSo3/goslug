@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 	"fmt"
+	"goslug/configs/enums"
 	"goslug/configs/types"
 	"slices"
 )
@@ -58,13 +59,13 @@ func (s *MemoryStorage) AddRedirect(newRedirect types.Redirect) error {
 		} else {
 			// Slug already exist
 			fmt.Println("\tREQ:ERR SLUG ALREADY EXIST\t")
-			return errors.New(types.ERRORExistingSlug)
+			return errors.New(enums.ERRORExistingSlug)
 		}
 
 	} else {
 		// Bad Redirect Data
 		fmt.Println("\tREQ:ERR BAD REDIRECT\t")
-		return errors.New(types.ERRORBadRedirectData)
+		return errors.New(enums.ERRORBadRedirectData)
 	}
 }
 
@@ -77,7 +78,7 @@ func (s *MemoryStorage) RemoveRedirect(slug string) error {
 			return nil
 		}
 	}
-	return errors.New(types.ERRORNoMatchingSlug)
+	return errors.New(enums.ERRORNoMatchingSlug)
 }
 
 func (s *MemoryStorage) GetRedirects() ([]types.Redirect, error) {

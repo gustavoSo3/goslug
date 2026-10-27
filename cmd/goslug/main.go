@@ -2,9 +2,11 @@ package main
 
 import (
 	"fmt"
+	"goslug/configs/credentials"
 	"goslug/internal/database"
 	"goslug/internal/handlers"
 	"goslug/internal/handlers/api"
+	"goslug/internal/middleware"
 	"net/http"
 	"os"
 )
@@ -15,19 +17,11 @@ func main() {
 	var HOST string
 	var PORT string
 
-	envPort, exist := os.LookupEnv("PORT")
-	if exist {
-		PORT = envPort
-	} else {
-		PORT = ":8080"
-	}
+	PORT = setEnv("PORT", ":8080")
+	HOST = setEnv("HOST", "0.0.0.0")
 
-	envAddress, exist := os.LookupEnv("HOST")
-	if exist {
-		HOST = envAddress
-	} else {
-		HOST = "0.0.0.0"
-	}
+	credentials.AUTH_USERNAME = setEnv("USERNAME", "admin")
+	credentials.AUTH_PASSWORD = setEnv("PASSWORD", "password")
 
 	printMenu()
 
@@ -43,15 +37,25 @@ func main() {
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("website/public"))))
 	fmt.Println("setting\t\t/public")
 
-	http.HandleFunc("/admin", handlers.Admin)
-	fmt.Println("listening\t/admin")
+	http.HandleFunc("/login", handlers.Login)
 
-	http.HandleFunc("/api/redirects", api.ApiRedirects)
+	http.HandleFunc("/admin", middleware.RequireAuth(handlers.Admin))
+	fmt.Println("listening\t/admin", "GET, POST, DELETE")
+
+	http.HandleFunc("/api/redirects", middleware.RequireAuth(api.ApiRedirects))
 	fmt.Println("listening\t/api/redirects ", "POST, DELETE")
 
 	fmt.Println("Server up at: http://" + HOST + PORT + "\n\n")
 	http.ListenAndServe(HOST+PORT, nil)
 
+}
+
+func setEnv(variable string, def string) string {
+	env, exist := os.LookupEnv(variable)
+	if exist {
+		return env
+	}
+	return def
 }
 
 func printMenu() {
