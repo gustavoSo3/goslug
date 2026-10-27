@@ -7,6 +7,7 @@ import (
 	"goslug/internal/handlers/api"
 	"goslug/internal/logger"
 	"goslug/internal/middleware"
+	"goslug/internal/utils"
 	"net/http"
 	"os"
 )
@@ -17,11 +18,11 @@ func main() {
 	var HOST string
 	var PORT string
 
-	PORT = setEnv("PORT", ":8080")
-	HOST = setEnv("HOST", "0.0.0.0")
+	PORT = utils.SetEnv("PORT", ":8080")
+	HOST = utils.SetEnv("HOST", "0.0.0.0")
 
-	credentials.AUTH_USERNAME = setEnv("USERNAME", "admin")
-	credentials.AUTH_PASSWORD = setEnv("PASSWORD", "password")
+	credentials.AUTH_USERNAME = utils.SetEnv("USERNAME", "admin")
+	credentials.AUTH_PASSWORD = utils.SetEnv("PASSWORD", "password")
 
 	logger.PrintMenu()
 
@@ -54,15 +55,4 @@ func main() {
 	logger.Log("SERVER_UP at http://" + HOST + PORT)
 	http.ListenAndServe(HOST+PORT, nil)
 
-}
-
-func setEnv(variable string, def string) string {
-	env, exist := os.LookupEnv(variable)
-	if exist {
-		logger.Log("ENV_FOUND " + variable + ":" + env)
-		return env
-	}
-
-	logger.Log("ENV_NOT_FOUND::USING_DEFAULT " + variable + ":" + def)
-	return def
 }
