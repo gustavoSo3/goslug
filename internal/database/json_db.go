@@ -33,13 +33,13 @@ func (db *JSONDB) Load() error {
 				return mkErr
 			}
 
-			// 2. Initialize with an empty JSON structure (e.g., "[]" or "{}")
-			// A completely empty file will cause json.Unmarshal to fail later.
-			fileData = []byte("[]")
+			// Initialize with an empty JSON structure "{}"
+			fileData = []byte("{}")
 
 			if writeErr := os.WriteFile(db.jsonFilepath, fileData, 0644); writeErr != nil {
 				return writeErr
 			}
+
 		} else {
 			// Return any other unexpected error (like permission denied)
 			return err
