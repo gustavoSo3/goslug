@@ -6,10 +6,6 @@ type Redirect struct {
 	Destination string
 }
 
-type AdminData struct {
-	Redirects []Redirect
-}
-
 type LogInInfo struct {
 	Username string
 	Password string
