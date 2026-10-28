@@ -9,6 +9,7 @@ WorkingDirectory=/home/gus_sotres/goslug
 ExecStart=/home/gus_sotres/goslug/bin/main
 Restart=always
 RestartSec=5s
+#Environment="PORT=:8080" "USERNAME=admin" "PASSWORD=password"
 
 [Install]
 WantedBy=multi-user.target
