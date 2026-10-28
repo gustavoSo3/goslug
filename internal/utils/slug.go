@@ -1,0 +1,40 @@
+package utils
+
+import (
+	"goslug/configs/types"
+	"net/url"
+	"strings"
+	"unicode/utf8"
+)
+
+// Takes a slug and an array of redirects
+// If the slug is in store returns the index and true otherwise -1 and false
+func GetSlugIndex(slug string, redirects []types.Redirect) (int, bool) {
+	for i, v := range redirects {
+		if slug == v.Slug {
+			return i, true
+		}
+	}
+	return -1, false
+}
+
+// Performs checks to know if a redirect has a valid format and all fields
+func IsRedirectValid(redirect types.Redirect) bool {
+
+	// If any field is empty its not valid
+	if redirect.Description == "" || redirect.Slug == "" || redirect.Destination == "" {
+		return false
+	}
+
+	// Description is valid if is les than 100 chars
+	var validDescription bool = utf8.RuneCountInString(redirect.Description) <= 100
+
+	// Slug is valid if starts with "/" and doesnt have any spaces (maybe will need to check for -/_() later)
+	var validSlug bool = strings.HasPrefix(redirect.Slug, "/") && !strings.Contains(redirect.Slug, " ")
+
+	// Must parse without error AND have both a scheme and a host
+	u, err := url.Parse(redirect.Destination)
+	var validDestination bool = (err == nil && u.Scheme != "" && u.Host != "")
+
+	return validDescription && validSlug && validDestination
+}

@@ -4,7 +4,7 @@ import "goslug/configs/types"
 
 type DataBase interface {
 	Load() error
-	Save([]types.Redirect) error
+	Save() error
 	AddRedirect(types.Redirect) error
 	RemoveRedirect(string) error
 	GetRedirects() ([]types.Redirect, error)

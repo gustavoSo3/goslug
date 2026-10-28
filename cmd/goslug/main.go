@@ -27,15 +27,23 @@ func main() {
 	logger.PrintMenu()
 
 	// Initialize DB In Memory
-	var memoryDB *database.MemoryStorage = &database.MemoryStorage{}
+	var memoryDB *database.MemoryDB = &database.MemoryDB{}
 	err := memoryDB.Load()
 	if err != nil {
-		logger.Error("DATABASE Initialziation Dailed: " + err.Error())
+		logger.Error("MEMORY_DB Initialziation failed: " + err.Error())
+		os.Exit(1)
+	}
+
+	var jsonDB *database.JSONDB = &database.JSONDB{}
+	err = jsonDB.Load()
+	if err != nil {
+		logger.Error("JSON_DB Initialization failed: " + err.Error())
 		os.Exit(1)
 	}
 
 	logger.Log("DATABASE Initialziation Success")
-	database.RedirectDB = memoryDB
+	//database.RedirectDB = memoryDB
+	database.RedirectDB = jsonDB
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("website/public"))))
 	logger.Log("SERVING_STATIC_FILES on /public")

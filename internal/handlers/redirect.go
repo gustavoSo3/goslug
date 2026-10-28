@@ -7,13 +7,13 @@ import (
 	"net/http"
 )
 
-// /
+// Handler used to handle redirects, if not found redirects to welcome page
 func Redirect(w http.ResponseWriter, req *http.Request) {
 
 	if req.Method != "GET" {
 
 		logger.Log(req.URL.Path + " " + req.Method + " not allowed")
-		http.NotFound(w, req)
+		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
 	}
 

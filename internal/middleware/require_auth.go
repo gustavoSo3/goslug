@@ -6,6 +6,7 @@ import (
 	"net/http"
 )
 
+// Middleware to handle endpoints that need authentication
 func RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, req *http.Request) {
 
@@ -13,13 +14,13 @@ func RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 
 		if err != nil || authCookie.Value != credentials.AUTH_KEY {
 			// Not authenticated redirect to /login
-			logger.Log("Not authenticated redirecting to /login")
+			logger.Log("=====Unauthenticated -> /login =====")
 			http.Redirect(w, req, "/login", http.StatusSeeOther)
 			return
 		}
 
 		// Uthenticated
-		logger.Log("Authenticated")
+		logger.Log("=====Authenticated=====")
 		next(w, req)
 	}
 }

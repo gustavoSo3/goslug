@@ -5,6 +5,7 @@ import (
 	"os"
 )
 
+// Looks for the variable if found returns its value otherwise returns def
 func SetEnv(variable string, def string) string {
 	env, exist := os.LookupEnv(variable)
 	if exist {

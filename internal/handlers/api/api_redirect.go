@@ -9,12 +9,13 @@ import (
 	"net/http"
 )
 
-// /api/redirects
+// Handler used for calls to /api/redirects
 func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 
 	// If its POST
 	switch req.Method {
 	case "POST":
+
 		// Decoding body
 		var newRedirect types.Redirect
 		json.NewDecoder(req.Body).Decode(&newRedirect)
@@ -24,7 +25,6 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 		err := database.RedirectDB.AddRedirect(newRedirect)
 		if err != nil {
 			switch err.Error() {
-
 			case enums.ERRORExistingSlug:
 				// Bad Redirect Data
 				logger.Log("NEW_REDIRECT Not created", enums.ERRORExistingSlug)
@@ -34,7 +34,8 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 				// Bad Redirect Data
 				logger.Log("NEW_REDIRECT Not created", enums.ERRORBadRedirectData)
 				http.Error(w, enums.ERRORBadRedirectData, http.StatusBadRequest)
-
+			default:
+				http.Error(w, err.Error(), http.StatusBadRequest)
 			}
 			return
 		}
@@ -59,6 +60,8 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 		logger.Log("DELETING_SLUG Deleted")
 		w.WriteHeader(http.StatusOK)
 
+	default:
+		w.WriteHeader(http.StatusMethodNotAllowed)
 	}
 
 }
