@@ -21,6 +21,9 @@ GoSlug is a Go-based URL redirection service that features administrative contro
   - Description: Maximum 100 characters
   - Slug: Max 20 characters
   - Destination: Maximum URL length
+- [ ] Implement Fronend handeling of bad request
+  - [ ] Not allow send untill valid
+  - [ ] Handle bad request api responses
 
 ### 3. Storage Drivers
 - [x] Implement persistent storage support
