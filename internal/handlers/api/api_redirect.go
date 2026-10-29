@@ -39,13 +39,13 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 			}
 			return
 		}
-
+		database.RedirectDB.Save()
 		logger.Log("NEW_REDIRECT Created")
 		w.WriteHeader(http.StatusCreated)
 
 	case "DELETE":
 		// Decoding body
-		var slugToDelete string
+		var slugToDelete types.Slug
 		json.NewDecoder(req.Body).Decode(&slugToDelete)
 		logger.Log("DELETING_SLUG ", slugToDelete)
 
@@ -58,6 +58,7 @@ func ApiRedirects(w http.ResponseWriter, req *http.Request) {
 		}
 
 		logger.Log("DELETING_SLUG Deleted")
+		database.RedirectDB.Save()
 		w.WriteHeader(http.StatusOK)
 
 	default:

@@ -6,7 +6,7 @@ type DataBase interface {
 	Load() error
 	Save() error
 	AddRedirect(types.Redirect) error
-	RemoveRedirect(string) error
+	RemoveRedirect(types.Slug) error
 	GetRedirects() ([]types.Redirect, error)
 }
 

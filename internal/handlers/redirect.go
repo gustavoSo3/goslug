@@ -20,7 +20,7 @@ func Redirect(w http.ResponseWriter, req *http.Request) {
 	// Search for rediredirect slug match
 	redirects, _ := database.RedirectDB.GetRedirects()
 	for _, v := range redirects {
-		if v.Slug == req.URL.Path {
+		if string(v.Slug) == req.URL.Path {
 
 			logger.Log(req.URL.Path + " -> " + v.Destination)
 			http.Redirect(w, req, v.Destination, http.StatusSeeOther)

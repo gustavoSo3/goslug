@@ -5,19 +5,23 @@ import (
 	"errors"
 	"goslug/configs/enums"
 	"goslug/configs/types"
+	"goslug/internal/logger"
 	"goslug/internal/utils"
 	"io/fs"
 	"os"
 	"path/filepath"
-	"slices"
+	"sync"
 )
 
 type JSONDB struct {
-	Redirects    []types.Redirect `json:"redirects"`
+	Redirects    map[types.Slug]types.Redirect `json:"redirects"`
 	jsonFilepath string
+	mu           sync.Mutex
 }
 
 func (db *JSONDB) Load() error {
+	db.mu.Lock()
+	defer db.mu.Unlock()
 	// Set default path for storage file
 	if db.jsonFilepath == "" {
 		db.jsonFilepath = "./bin/redirect_data.json"
@@ -34,7 +38,7 @@ func (db *JSONDB) Load() error {
 			}
 
 			// Initialize with an empty JSON structure "{}"
-			fileData = []byte("{}")
+			fileData = []byte(`{"redirects":{}}`)
 
 			if writeErr := os.WriteFile(db.jsonFilepath, fileData, 0644); writeErr != nil {
 				return writeErr
@@ -56,6 +60,8 @@ func (db *JSONDB) Load() error {
 }
 
 func (db *JSONDB) Save() error {
+	db.mu.Lock()
+	defer db.mu.Unlock()
 	//Prepare data
 	//jsonData, err := json.MarshalIndent(db, "", "	")
 	jsonData, err := json.Marshal(db)
@@ -72,34 +78,47 @@ func (db *JSONDB) Save() error {
 }
 
 func (db *JSONDB) AddRedirect(newRedirect types.Redirect) error {
+	db.mu.Lock()
+	defer db.mu.Unlock()
 
 	if !utils.IsRedirectValid(newRedirect) {
 		return errors.New(enums.ERRORBadRedirectData)
 	}
 
-	_, exists := utils.GetSlugIndex(newRedirect.Slug, db.Redirects)
-	if exists {
+	_, inUse := db.Redirects[newRedirect.Slug]
+	logger.Log(inUse)
+
+	if inUse {
 		return errors.New(enums.ERRORExistingSlug)
 	}
 
-	db.Redirects = append(db.Redirects, newRedirect)
-	db.Save()
+	logger.Log(newRedirect)
+	db.Redirects[newRedirect.Slug] = newRedirect
+
+	logger.Log(db.Redirects)
 
 	return nil
 
 }
-func (db *JSONDB) RemoveRedirect(slug string) error {
-	i, exists := utils.GetSlugIndex(slug, db.Redirects)
+func (db *JSONDB) RemoveRedirect(slug types.Slug) error {
+	db.mu.Lock()
+	defer db.mu.Unlock()
+
+	_, exists := db.Redirects[types.Slug(slug)]
 
 	if !exists {
 		return errors.New(enums.ERRORNoMatchingSlug)
 	}
 
-	db.Redirects = slices.Delete(db.Redirects, i, i+1)
-	db.Save()
+	delete(db.Redirects, slug)
 
 	return nil
 }
 func (db *JSONDB) GetRedirects() ([]types.Redirect, error) {
-	return db.Redirects, nil
+	db.mu.Lock()
+	defer db.mu.Unlock()
+
+	returnRedirects := utils.RedirectMaptoSlice(db.Redirects)
+
+	return returnRedirects, nil
 }

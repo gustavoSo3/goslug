@@ -5,27 +5,30 @@ import (
 	"goslug/configs/enums"
 	"goslug/configs/types"
 	"goslug/internal/utils"
-	"slices"
+	"sync"
 )
 
 type MemoryDB struct {
-	redirects []types.Redirect
+	redirects map[types.Slug]types.Redirect
+	mu        sync.Mutex
 }
 
 func (db *MemoryDB) Load() error {
+	db.mu.Lock()
+	defer db.mu.Unlock()
 	// Sample Data
-	db.redirects = []types.Redirect{
-		{
+	db.redirects = map[types.Slug]types.Redirect{
+		"/lin": {
 			Description: "To my linkedin",
 			Slug:        "/lin",
 			Destination: "https://www.linkedin.com/in/gustavoso3",
 		},
-		{
+		"/gh": {
 			Description: "Github :)",
 			Slug:        "/gh",
 			Destination: "https://github.com/gustavoSo3",
 		},
-		{
+		"/cv": {
 			Description: "To my CV",
 			Slug:        "/cv",
 			Destination: "https://storage.googleapis.com/resume_sotres_dev/gustavo_sotres_oct_2026.pdf",
@@ -39,38 +42,46 @@ func (db *MemoryDB) Save() error {
 }
 
 func (db *MemoryDB) AddRedirect(newRedirect types.Redirect) error {
+	db.mu.Lock()
+	defer db.mu.Unlock()
 
 	if utils.IsRedirectValid(newRedirect) {
 		// Bad Redirect Data
 		return errors.New(enums.ERRORBadRedirectData)
 	}
 
-	_, exist := utils.GetSlugIndex(newRedirect.Slug, db.redirects)
+	_, exist := db.redirects[newRedirect.Slug]
 	if exist {
 		// Slug already exist
 		return errors.New(enums.ERRORExistingSlug)
 	}
 
-	db.redirects = append(db.redirects, newRedirect)
-
+	db.redirects[newRedirect.Slug] = newRedirect
 	return nil
 
 }
 
-func (db *MemoryDB) RemoveRedirect(slug string) error {
+func (db *MemoryDB) RemoveRedirect(slug types.Slug) error {
+	db.mu.Lock()
+	defer db.mu.Unlock()
 
-	index, exist := utils.GetSlugIndex(slug, db.redirects)
+	_, exist := db.redirects[slug]
 	if !exist {
 		// Slug not in db
 		return errors.New(enums.ERRORNoMatchingSlug)
 
 	}
 
-	db.redirects = slices.Delete(db.redirects, index, index+1)
+	delete(db.redirects, slug)
 
 	return nil
 }
 
 func (db *MemoryDB) GetRedirects() ([]types.Redirect, error) {
-	return db.redirects, nil
+	db.mu.Lock()
+	defer db.mu.Unlock()
+
+	returnRedirects := utils.RedirectMaptoSlice(db.redirects)
+
+	return returnRedirects, nil
 }

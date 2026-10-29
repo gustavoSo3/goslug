@@ -7,17 +7,6 @@ import (
 	"unicode/utf8"
 )
 
-// Takes a slug and an array of redirects
-// If the slug is in store returns the index and true otherwise -1 and false
-func GetSlugIndex(slug string, redirects []types.Redirect) (int, bool) {
-	for i, v := range redirects {
-		if slug == v.Slug {
-			return i, true
-		}
-	}
-	return -1, false
-}
-
 // Performs checks to know if a redirect has a valid format and all fields
 func IsRedirectValid(redirect types.Redirect) bool {
 
@@ -30,7 +19,7 @@ func IsRedirectValid(redirect types.Redirect) bool {
 	var validDescription bool = utf8.RuneCountInString(redirect.Description) <= 100
 
 	// Slug is valid if starts with "/" and doesnt have any spaces (maybe will need to check for -/_() later)
-	var validSlug bool = strings.HasPrefix(redirect.Slug, "/") && !strings.Contains(redirect.Slug, " ")
+	var validSlug bool = strings.HasPrefix(string(redirect.Slug), "/") && !strings.Contains(string(redirect.Slug), " ")
 
 	// Must parse without error AND have both a scheme and a host
 	u, err := url.Parse(redirect.Destination)

@@ -1,8 +1,10 @@
 package types
 
+type Slug string
+
 type Redirect struct {
 	Description string
-	Slug        string
+	Slug        Slug
 	Destination string
 }
 

@@ -1,41 +1,66 @@
-GoSlug
+# GoSlug
 
-TODO:
+## Overview
+GoSlug is a Go-based URL redirection service that features administrative controls, flexible storage adapters, and session management.
 
-* [x] / gives you the welcome page
-* [x] /admin takes you to slug admin page
-* [x] /slug will redirect to slugs saved
-* [x] /api
-    * [x] POST /api/redirects will create a new redirect, no duplicate slugs
-    * [x] DELETE /api/redirects will delete a redirect using the slug as reference
+## Project Roadmap / TODOs
 
-* [x] validate all fields - Current only if all aren't empty
-* [x] Slug must not contain spaces
-* [x] limit description to 100 chrs and slug to 20 and destination to max URL size
+### 1. Routing & Endpoints
+- [x] `/` - Serves the welcome page
+- [x] `/admin` - Accesses the slug administration dashboard
+- [x] `/{slug}` - Redirects to stored destination URL
+- [x] `POST /api/redirects` - Creates a new redirect (prevents duplicate slugs)
+- [x] `DELETE /api/redirects` - Deletes a redirect referenced by slug
 
-* [x] Have persistan storage
-* [ ] Implement storage method slection via ENV
-    * [x] Database Interface
-    * [x] In memory database (deleted after restart)
-    * [x] localfile storage (saved in json)
-    * [ ] remote db (firestore/mongodb)
+### 2. Request & Input Validation
+- [x] Validate all fields (ensures required fields are non-empty)
+- [x] Ensure slugs contain no spaces
+- [x] Enforce field length limits:
+  - Description: Maximum 100 characters
+  - Destination: Maximum URL length
 
+### 3. Storage Drivers
+- [x] Implement persistent storage support
+- [x] Design generic Database Interface
+- [x] In-memory database driver (volatile, lost on restart)
+- [x] Local JSON file storage driver
+- [ ] Implement storage engine selection via environment variables (`ENV`)
+- [ ] Add remote database driver support (Firestore / MongoDB)
 
-* [x] User accounts? maybe just the admin, and on first set up must change??
-    * Authentication has USERNAME and PASSWORD env variables
-    * If not set will be just admin and password
-    * middlewear set so only authenticated can use /admin /api/slugs
-    * /login is the endpoint for all login operations
+### 4. Authentication & Authorization
+- [x] Environment variable configuration for `USERNAME` and `PASSWORD`
+  - Default fallback credentials: `admin` / `password`
+- [x] Dedicated `/login` endpoint for authentication actions
+- [x] Authentication middleware to protect `/admin` and `/api/redirects` routes
+- [x] Single admin account flow (initial setup requirement)
 
-* [x] Better Loggin Of runn time logs
+### 5. Logging & UI
+- [x] Implement structured runtime logging
+- [x] Build simple Welcome landing page
 
-* [x] Created simple Welcome page
+---
 
+## Refactoring & Security Enhancements
 
-* [ ] Testing
-    * [ ] Test for input validation
-    * [ ] Test for all enpoind methods
-        * [ ] /login
-        * [ ] /admin
-        * [ ] /
-        * [ ] /api/redirects
+### Session & Concurrency Refactor
+- [ ] Fix single session bottleneck: Replace `AUTH_KEY` single string with a `map[string]time.Time` session store.
+- [ ] Prevent data races: Add `sync.Mutex` (`sessionsMu`) around reads/writes to the session map.
+  - [x] Also added on local db reads and writes (inMemory and JSON)
+- [x] Fix accidental logouts: Remove `credentials.AUTH_KEY = "UNAUTORIZED"` on failed login attempts.
+- [ ] Use secure tokens: Replace hashed timestamp with `crypto/rand` token generation (`CreateSession()`).
+- [ ] Fix session deletion: Add `RevokeSession(key)` to delete tokens from the map upon logout (`DELETE` request).
+
+### Redirect Array to Map
+- [x] Refactor Redirects to use an map, insted of an array, and maybe just get a list of it when asking GetRedirects()
+
+---
+
+## Testing Plan
+
+- [ ] Core test suite setup
+- [ ] Input validation tests
+- [ ] Endpoint integration tests:
+  - [ ] `GET /`
+  - [ ] `POST /login`
+  - [ ] `GET /admin`
+  - [ ] `API /api/redirects`
