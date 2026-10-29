@@ -6,7 +6,8 @@ COPY . .
 
 RUN go mod tidy
 
-RUN go build -o ./bin ./api/cmd/goslug/main.go
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o bin/main ./cmd/goslug/main.go
+
 
 EXPOSE 8080
 

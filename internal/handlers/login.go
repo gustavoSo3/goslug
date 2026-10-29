@@ -46,12 +46,11 @@ func Login(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 
-		logger.Log("AUTH_ATTEMPT", "username:", logIn.Username, "password:", logIn.Password)
+		logger.Log("AUTH_ATTEMPT", "username:", logIn.Username)
 
 		if !credentials.ValidLogInCredentials(logIn.Username, logIn.Password) {
 			// IF we dont have valid credentials just repond with unautorized
 			logger.Log("AUTH_ATTEMPT", "FAILED Invalid credentials")
-			credentials.AUTH_KEY = "UNAUTORIZED"
 			w.WriteHeader(http.StatusUnauthorized)
 			return
 

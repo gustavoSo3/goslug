@@ -18,7 +18,7 @@ func main() {
 	var HOST string
 	var PORT string
 
-	PORT = utils.SetEnv("PORT", ":8080")
+	PORT = utils.SetEnv("PORT", "8080")
 	HOST = utils.SetEnv("HOST", "0.0.0.0")
 
 	credentials.AUTH_USERNAME = utils.SetEnv("USERNAME", "admin")
@@ -60,7 +60,7 @@ func main() {
 	http.HandleFunc("/api/redirects", middleware.RequireAuth(api.ApiRedirects))
 	logger.Log("LISTENING on /api/redirects", "METHODS: POST, DELETE", "MIDDLEWARE: RequireAuth")
 
-	logger.Log("SERVER_UP at http://" + HOST + PORT)
-	http.ListenAndServe(HOST+PORT, nil)
+	logger.Log("SERVER_UP at http://" + HOST + ":" + PORT)
+	http.ListenAndServe(HOST+":"+PORT, nil)
 
 }
