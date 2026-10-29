@@ -13,10 +13,13 @@ GoSlug is a Go-based URL redirection service that features administrative contro
 - [x] `DELETE /api/redirects` - Deletes a redirect referenced by slug
 
 ### 2. Request & Input Validation
-- [x] Validate all fields (ensures required fields are non-empty)
+- [x] Validate all fields (ensures required fields are non-empty) For both front and back end
+  - [ ] Front
+  - [x] Back
 - [x] Ensure slugs contain no spaces
 - [x] Enforce field length limits:
   - Description: Maximum 100 characters
+  - Slug: Max 20 characters
   - Destination: Maximum URL length
 
 ### 3. Storage Drivers
