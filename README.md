@@ -113,3 +113,4 @@ GoSlug is a Go-based URL redirection service that features administrative contro
 - [ ] Single use slug?
 - [ ] Time frame slug
 - [ ] Tagging and group by tagging
+- [ ] Multi account setup
