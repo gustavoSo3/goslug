@@ -1,5 +1,26 @@
 # GoSlug
 
+## ENVs
+
+`
+HOST
+`
+`
+PORT
+`
+`
+USERNAME
+`
+`
+PASSWORD
+```
+```
+STORAGE_DRIVER
+```
+Options:
+- `memory`
+- `json`
+
 ## Overview
 GoSlug is a Go-based URL redirection service that features administrative controls, flexible storage adapters, and session management.
 
@@ -65,6 +86,10 @@ GoSlug is a Go-based URL redirection service that features administrative contro
 ### Redirect Array to Map
 - [x] Refactor Redirects to use an map, insted of an array, and maybe just get a list of it when asking GetRedirects()
 
+### Sec
+- [ ] prevent loops by checking if previous href was destiny?
+  - or dont allow to save if loop detected?? how do u detect a loop?
+
 ---
 
 ## Testing Plan
@@ -87,3 +112,4 @@ GoSlug is a Go-based URL redirection service that features administrative contro
 - [ ] Link opening tracking?
 - [ ] Single use slug?
 - [ ] Time frame slug
+- [ ] Tagging and group by tagging
