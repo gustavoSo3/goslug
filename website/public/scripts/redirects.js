@@ -2,6 +2,7 @@
 
 
 const newRedirectBtn = document.getElementById("submit-new-redirect");
+const liveAlertDiv = document.getElementById('login-live-alert')
 
 const newRedirectDescription = document.getElementById("new-description");
 const newRedirectSlug = document.getElementById("new-slug");
@@ -32,6 +33,7 @@ document.addEventListener("keyup", () => {
         newRedirectBtn.disabled = true;
     }
 });
+
 
 
 function AreValidFields(description, slug, destination) {
@@ -83,19 +85,16 @@ async function postRedirect(description, slug, destination){
         body: JSON.stringify(newRedirect) // Convert the JS object into a JSON string
         });
 
+        
+
         // Handle the server's response
         if (res.ok) {
-            newRedirectDescription.value = "";
-            newRedirectSlug.value = "";
-            newRedirectDestination.value = "";
-
             location.reload();
-            
-        } else {
-            console.error('Server error:', res.status);
+        }else{
+            handleBadRedirectStatus(res.status);
         }
     } catch (error) {
-        console.error('Network error:', error);
+        appendAlert("Server error: " + error , "danger");
     }
 };
 
@@ -112,13 +111,46 @@ async function deleteRedirect(slug) {
             body: JSON.stringify(slug) // Convert the JS object into a JSON string
             });
 
+           
+            // Handle the server's response
             if (res.ok) {
                 location.reload();
-            } else {
-                console.error('Server error:', res.status);
+            }else {
+                handleBadRedirectStatus(res.status);
             }
-        } catch (error) {
-            console.error('Network error:', error);
+        }catch (error) {
+            appendAlert("Server error: " + error , "danger");
         }
     }
 };
+
+//redirects-live-alert
+function appendAlert(message, type)  {
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = [
+    `<div class="alert theme-${type}" role="alert">`,
+    `   <p>${message}</p>`,
+    '   <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
+
+  liveAlertDiv.append(wrapper)
+}
+
+function handleBadRedirectStatus(status){
+
+    switch (status) {
+        case 400:
+            //Bad request
+            appendAlert("Bad login. Double check your credentials.", "secondary");
+            break;
+        case 405:
+            //Unauth
+            appendAlert("Something went wrong.", "secondary");
+            break;
+            
+        default:
+            appendAlert("Server error: " + res.status, res.body, "warning");
+            break;
+    }
+}

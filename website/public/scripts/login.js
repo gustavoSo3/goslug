@@ -1,4 +1,5 @@
 const loginBtn = document.getElementById("submit-login");
+const liveAlertDiv = document.getElementById('login-live-alert')
 
 const usernameInput = document.getElementById("user-name");
 const passwordInput = document.getElementById("password");
@@ -27,6 +28,7 @@ document.addEventListener("keyup", () => {
         loginBtn.disabled = true;
     }
 });
+
 
 function AreValidFields(username, password) {
 
@@ -72,9 +74,32 @@ async function postLogin(username, password) {
         if (res.ok) {
             location.href = "/admin"
         } else {
-            console.error('Server error:', res.status);
+
+            switch (res.status) {
+                case 401:
+                    appendAlert("Bad login. Double check your credentials.", "secondary");
+                    break;
+                default:
+                    appendAlert("Server error: " + res.status, res.body, "warning");
+                    break;
+            }
+
         }
     } catch (error) {
-        console.error('Network error:', error);
+        appendAlert("Server error: " + error , "danger");
     }
+}
+
+
+//login-live-alert
+function appendAlert(message, type)  {
+  const wrapper = document.createElement('div')
+  wrapper.innerHTML = [
+    `<div class="alert theme-${type}" role="alert">`,
+    `   <p>${message}</p>`,
+    '   <button type="button" class="btn-close ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>',
+    '</div>'
+  ].join('')
+
+  liveAlertDiv.append(wrapper)
 }
