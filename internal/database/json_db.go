@@ -5,7 +5,6 @@ import (
 	"errors"
 	"goslug/configs/enums"
 	"goslug/configs/types"
-	"goslug/internal/logger"
 	"goslug/internal/utils"
 	"io/fs"
 	"os"
@@ -86,16 +85,12 @@ func (db *JSONDB) AddRedirect(newRedirect types.Redirect) error {
 	}
 
 	_, inUse := db.Redirects[newRedirect.Slug]
-	logger.Log(inUse)
 
 	if inUse {
 		return errors.New(enums.ERRORExistingSlug)
 	}
 
-	logger.Log(newRedirect)
 	db.Redirects[newRedirect.Slug] = newRedirect
-
-	logger.Log(db.Redirects)
 
 	return nil
 

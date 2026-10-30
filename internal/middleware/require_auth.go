@@ -12,7 +12,7 @@ func RequireAuth(next http.HandlerFunc) http.HandlerFunc {
 
 		authCookie, err := req.Cookie("goslug_session")
 
-		if err != nil || authCookie.Value != credentials.AUTH_KEY {
+		if err != nil || !credentials.ValidateAuthentication(authCookie.Value) {
 			// Not authenticated redirect to /login
 			logger.Log("=====Unauthenticated -> /login =====")
 			http.Redirect(w, req, "/login", http.StatusSeeOther)

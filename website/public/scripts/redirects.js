@@ -2,7 +2,7 @@
 
 
 const newRedirectBtn = document.getElementById("submit-new-redirect");
-const liveAlertDiv = document.getElementById('login-live-alert')
+const liveAlertDiv = document.getElementById('redirects-live-alert')
 
 const newRedirectDescription = document.getElementById("new-description");
 const newRedirectSlug = document.getElementById("new-slug");
@@ -142,7 +142,7 @@ function handleBadRedirectStatus(status){
     switch (status) {
         case 400:
             //Bad request
-            appendAlert("Bad login. Double check your credentials.", "secondary");
+            appendAlert("Bad Redirect. Please check requirements.", "warning");
             break;
         case 405:
             //Unauth

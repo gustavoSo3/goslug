@@ -24,3 +24,9 @@ func Error(a ...any) {
 	fmt.Print("ERROR\t")
 	fmt.Println(a...)
 }
+
+func Debug(a ...any) {
+	fmt.Print("DEBUG::")
+	fmt.Println(a...)
+
+}

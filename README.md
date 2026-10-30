@@ -76,12 +76,12 @@ GoSlug is a Go-based URL redirection service that features administrative contro
 ## Refactoring & Security Enhancements
 
 ### Session & Concurrency Refactor
-- [ ] Fix single session bottleneck: Replace `AUTH_KEY` single string with a `map[string]time.Time` session store.
-- [ ] Prevent data races: Add `sync.Mutex` (`sessionsMu`) around reads/writes to the session map.
+- [x] Fix single session bottleneck: Replace `AUTH_KEY` single string with a `map[string]time.Time` session store.
+- [x] Prevent data races: Add `sync.Mutex` (`sessionsMu`) around reads/writes to the session map.
   - [x] Also added on local db reads and writes (inMemory and JSON)
 - [x] Fix accidental logouts: Remove `credentials.AUTH_KEY = "UNAUTORIZED"` on failed login attempts.
-- [ ] Use secure tokens: Replace hashed timestamp with `crypto/rand` token generation (`CreateSession()`).
-- [ ] Fix session deletion: Add `RevokeSession(key)` to delete tokens from the map upon logout (`DELETE` request).
+- [x] Use secure tokens: Replace hashed timestamp with `crypto/rand` token generation (`CreateSession()`).
+- [x] Fix session deletion: Add `RevokeSession(key)` to delete tokens from the map upon logout (`DELETE` request).
 
 ### Redirect Array to Map
 - [x] Refactor Redirects to use an map, insted of an array, and maybe just get a list of it when asking GetRedirects()

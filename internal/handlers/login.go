@@ -1,8 +1,6 @@
 package handlers
 
 import (
-	"crypto/sha256"
-	"encoding/hex"
 	"encoding/json"
 	"goslug/configs/credentials"
 	"goslug/configs/types"
@@ -15,18 +13,16 @@ import (
 // Handler used to manage Login different paths if user is authenticated or not
 func Login(w http.ResponseWriter, req *http.Request) {
 
-	var authenticated bool = false
 	authCookie, err := req.Cookie("goslug_session")
-	if err == nil && credentials.ValidAuthKey(authCookie.Value) {
-		authenticated = true
-	}
+
+	var authenticated bool = err == nil && credentials.ValidateAuthentication(authCookie.Value)
 
 	switch req.Method {
 	case "GET":
 
 		// If im authenticated then just redirect to admin
 		if authenticated {
-			logger.Log("Already authenticated redirecting to /admin")
+			logger.Log("GET Already authenticated redirecting to /admin")
 			http.Redirect(w, req, "/admin", http.StatusSeeOther)
 			return
 		}
@@ -39,6 +35,13 @@ func Login(w http.ResponseWriter, req *http.Request) {
 
 	case "POST":
 
+		// If im authenticated then just redirect to admin
+		if authenticated {
+			logger.Log("POST Already authenticated redirecting to /admin")
+			http.Redirect(w, req, "/admin", http.StatusSeeOther)
+			return
+		}
+
 		// Decode request body
 		var login types.LoginInfo
 		err := json.NewDecoder(req.Body).Decode(&login)
@@ -47,35 +50,28 @@ func Login(w http.ResponseWriter, req *http.Request) {
 		}
 
 		logger.Log("AUTH_ATTEMPT", "username:", login.Username)
+		authKey, successfulAuthentication := credentials.Authenticate(login.Username, login.Password)
 
-		if !credentials.ValidLoginCredentials(login.Username, login.Password) {
-			// IF we dont have valid credentials just repond with unautorized
-			logger.Log("AUTH_ATTEMPT", "FAILED Invalid credentials")
+		if successfulAuthentication {
+
+			authCookie = &http.Cookie{
+				Name:     "goslug_session",
+				Value:    authKey,
+				Path:     "/",
+				Expires:  time.Now().Add(24 * time.Hour),
+				HttpOnly: true,
+				Secure:   true,
+				SameSite: http.SameSiteLaxMode,
+			}
+
+			http.SetCookie(w, authCookie)
+			w.WriteHeader(http.StatusCreated)
+		} else {
 			w.WriteHeader(http.StatusUnauthorized)
-			return
-
 		}
-
-		logger.Log("AUTH_ATTEMPT", "Valid credentials")
-		hash := sha256.New()
-		hash.Write([]byte(string(credentials.AUTH_USERNAME + credentials.AUTH_PASSWORD + time.Now().String())))
-		credentials.AUTH_KEY = hex.EncodeToString(hash.Sum(nil))
-
-		authCookie = &http.Cookie{
-			Name:     "goslug_session",
-			Value:    credentials.AUTH_KEY,
-			Path:     "/",
-			Expires:  time.Now().Add(24 * time.Hour),
-			HttpOnly: true,
-			Secure:   true,
-			SameSite: http.SameSiteLaxMode,
-		}
-
-		http.SetCookie(w, authCookie)
-		w.WriteHeader(http.StatusCreated)
 
 	case "DELETE":
-		// If autenticated sent a empty cookie with no value to clear session (logout)
+		// If not autenticated sent a empty cookie with no value to clear session (logout)
 		if !authenticated {
 			w.WriteHeader(http.StatusUnauthorized)
 			return
