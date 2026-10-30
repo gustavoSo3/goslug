@@ -14,23 +14,29 @@ GoSlug is a Go-based URL redirection service that features administrative contro
 
 ### 2. Request & Input Validation
 - [x] Validate all fields (ensures required fields are non-empty) For both front and back end
-  - [ ] Front
+  - [x] Front
   - [x] Back
 - [x] Ensure slugs contain no spaces
 - [x] Enforce field length limits:
   - Description: Maximum 100 characters
   - Slug: Max 20 characters
-  - Destination: Maximum URL length
-- [ ] Implement Fronend handeling of bad request
-  - [ ] Not allow send untill valid
-  - [ ] Handle bad request api responses
+  - Destination: Valid http:// or https:// url
+- [ ] Implement Frontend handeling of bad request
+  - [ ] login
+  - [ ] api/redirects
 
 ### 3. Storage Drivers
 - [x] Implement persistent storage support
 - [x] Design generic Database Interface
 - [x] In-memory database driver (volatile, lost on restart)
 - [x] Local JSON file storage driver
-- [ ] Implement storage engine selection via environment variables (`ENV`)
+- [x] Implement storage engine selection via environment variable STORAGE_DRIVER
+  - Current options:
+    - memory
+    - json
+  - If ENV not set will default to json
+  - If invalid STORAGE_DRIVER option will exit program
+  - If selected DB fails will exit program
 - [ ] Add remote database driver support (Firestore / MongoDB)
 
 ### 4. Authentication & Authorization

@@ -15,35 +15,41 @@ import (
 func main() {
 
 	// GET ENVs
-	var HOST string
-	var PORT string
-
-	PORT = utils.SetEnv("PORT", "8080")
-	HOST = utils.SetEnv("HOST", "0.0.0.0")
+	var HOST string = utils.SetEnv("HOST", "0.0.0.0")
+	var PORT string = utils.SetEnv("PORT", "8080")
+	var STORAGE_DRIVER string = utils.SetEnv("STORAGE_DRIVER", "json")
 
 	credentials.AUTH_USERNAME = utils.SetEnv("USERNAME", "admin")
 	credentials.AUTH_PASSWORD = utils.SetEnv("PASSWORD", "password")
 
 	logger.PrintMenu()
 
-	// Initialize DB In Memory
-	var memoryDB *database.MemoryDB = &database.MemoryDB{}
-	err := memoryDB.Load()
-	if err != nil {
-		logger.Error("MEMORY_DB Initialziation failed: " + err.Error())
+	var err error
+	switch STORAGE_DRIVER {
+	case "memory":
+		// Initialize DB In Memory
+		var memoryDB *database.MemoryDB = &database.MemoryDB{}
+		err = memoryDB.Load()
+		if err != nil {
+			// If error exit since there is no alternative for memory
+			logger.Error("MEMORY_DB Initialziation failed: " + err.Error())
+			os.Exit(1)
+		}
+		logger.Log("DATABASE MEMORY_DB Initialized")
+		database.RedirectDB = memoryDB
+	case "json":
+		var jsonDB *database.JSONDB = &database.JSONDB{}
+		err = jsonDB.Load()
+		if err != nil {
+			logger.Error("JSON_DB Initialization failed: " + err.Error())
+			os.Exit(1)
+		}
+		logger.Log("DATABASE JSON_DB Initialized")
+		database.RedirectDB = jsonDB
+	default:
+		logger.Error("INVALID_ENV STORAGE_DRIVER ", STORAGE_DRIVER)
 		os.Exit(1)
 	}
-
-	var jsonDB *database.JSONDB = &database.JSONDB{}
-	err = jsonDB.Load()
-	if err != nil {
-		logger.Error("JSON_DB Initialization failed: " + err.Error())
-		os.Exit(1)
-	}
-
-	logger.Log("DATABASE Initialziation Success")
-	//database.RedirectDB = memoryDB
-	database.RedirectDB = jsonDB
 
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("website/public"))))
 	logger.Log("SERVING_STATIC_FILES on /public")
