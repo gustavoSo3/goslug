@@ -15,7 +15,7 @@ import (
 func main() {
 
 	// GET ENVs
-	var HOST string = utils.SetEnv("HOST", "0.0.0.0")
+	var HOST string = utils.SetEnv("HOST", "localhost")
 	var PORT string = utils.SetEnv("PORT", "8080")
 	var STORAGE_DRIVER string = utils.SetEnv("STORAGE_DRIVER", "json")
 
