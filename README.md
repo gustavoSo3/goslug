@@ -70,3 +70,14 @@ GoSlug is a Go-based URL redirection service that features administrative contro
   - [ ] `POST /login`
   - [ ] `GET /admin`
   - [ ] `API /api/redirects`
+
+
+---
+
+### Extras Ideas:
+
+- [ ] Option to generate random slug
+- [ ] Add link access counter
+- [ ] Link opening tracking?
+- [ ] Single use slug?
+- [ ] Time frame slug
