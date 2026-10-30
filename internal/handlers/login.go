@@ -40,15 +40,15 @@ func Login(w http.ResponseWriter, req *http.Request) {
 	case "POST":
 
 		// Decode request body
-		var logIn types.LogInInfo
-		err := json.NewDecoder(req.Body).Decode(&logIn)
+		var login types.LoginInfo
+		err := json.NewDecoder(req.Body).Decode(&login)
 		if err != nil {
 			return
 		}
 
-		logger.Log("AUTH_ATTEMPT", "username:", logIn.Username)
+		logger.Log("AUTH_ATTEMPT", "username:", login.Username)
 
-		if !credentials.ValidLogInCredentials(logIn.Username, logIn.Password) {
+		if !credentials.ValidLoginCredentials(login.Username, login.Password) {
 			// IF we dont have valid credentials just repond with unautorized
 			logger.Log("AUTH_ATTEMPT", "FAILED Invalid credentials")
 			w.WriteHeader(http.StatusUnauthorized)

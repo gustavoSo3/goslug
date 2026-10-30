@@ -21,7 +21,8 @@ func IsRedirectValid(redirect types.Redirect) bool {
 	var validDescription bool = utf8.RuneCountInString(redirect.Description) <= 100
 
 	// Slug is valid if starts with "/" is less than 20 chars and doesnt have any spaces (maybe will need to check for -/_() later)
-	var validSlug bool = strings.HasPrefix(string(redirect.Slug), "/") && utf8.RuneCountInString(string(redirect.Slug)) <= 20 && !strings.Contains(string(redirect.Slug), " ")
+	// Using 21 since 1 char is used for "/"
+	var validSlug bool = strings.HasPrefix(string(redirect.Slug), "/") && utf8.RuneCountInString(string(redirect.Slug)) <= 21 && !strings.Contains(string(redirect.Slug), " ")
 
 	// Must parse without error AND have both a scheme and a host
 	u, err := url.Parse(redirect.Destination)

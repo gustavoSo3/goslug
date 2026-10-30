@@ -5,33 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/svg+xml" href="/public/favicon.svg">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
-    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
 
     <title>GoSlug Admin</title>
 
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
+
+    <script>
+        const savedTheme = localStorage.getItem("theme") || 
+            (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-bs-theme", savedTheme);
+    </script>
+
 </head>
 <body>
+
+    <!-- Header -->
     <header class="container my-3 mb-10">
         <div class="d-flex justify-content-between align-items-center">
             
+            
             <!-- Left Side: Logo + Title -->
             <div class="d-flex align-items-center gap-3">
-                <img src="public/favicon.svg" alt="url-redirect Logo" width="50" height="50">
-                <h1 class="h3 mb-0">Admin Console</h1>
+
+                <!-- Logo  -->
+                <a href="/">
+                    <img src="public/favicon.svg" alt="url-redirect Logo" width="50" height="50">
+                </a>
+
+                <!-- Title -->
+                <h1 class="h3">Admin console</h1>
             </div>
 
+
+             
+            <!-- Right Side: Logout + Color Mode Toggle + Admin Page -->
             <div class="d-flex justify-content-evenly align-items-center gap-3">
                     
-                <!--Logout button-->
+                <!-- Logout button -->
                 <button id="logout-button" class="theme-danger btn-outline">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
-                    <path d="M7.5 1v7h1V1z"/>
-                    <path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812"/>
-                </svg>
+                    Logout
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
+                        <path d="M7.5 1v7h1V1z"/>
+                        <path d="M3 8.812a5 5 0 0 1 2.578-4.375l-.485-.874A6 6 0 1 0 11 3.616l-.501.865A5 5 0 1 1 3 8.812"/>
+                    </svg>
                 </button>
 
-                <!--Toggle Light Dark button-->
+                <!-- Color Mode Toggle -->
                 <button id="color-mode-toggle" class="btn-outline">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sun" viewBox="0 0 16 16">
                         <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/>
@@ -41,7 +62,7 @@
                         <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"/>
                     </svg>
                 </button>
-                <!-- Right Side: Profile Image -->
+                <!-- Admin Page -->
                 <a href="/admin" class="d-inline-block text-decoration-none" style="color: inherit;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
                         <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
@@ -54,32 +75,48 @@
 
     
     <!-- New Slug Input Form -->
-    <div class="container mb-10">
-        <div class="d-flex flex-column justify-content-evenly align-items-center gap-3 ">
-            <div id="create-redirect-form" class="d-flex flex-column justify-content-evenly align-items-center gap-3 xl:flex-row w-100">
+    <div class="container mb-10 d-flex flex-column justify-content-evenly align-items-center gap-3">
 
-                <div class="input-group ">
-                    <label for="new-description" class="input-group-text">Description</label>
-                    <input type="text" id="new-description" placeholder="e.g., To Google" class="form-control"></input>
-                </div>
-                
-                <div class="input-group">
-                    <label for="new-slug" class="input-group-text">Slug /</label>
-                    <input type="text" id="new-slug" placeholder="e.g., ggl" class="form-control"></input>
-                </div>
-                
-                <div class="input-group">
-                    <label for="new-destination" class="input-group-text">Destination URL</label>
-                    <input type="url" id="new-destination" placeholder="e.g., https://google.com" class="form-control"></input>
-                </div>
+        <!-- Inputs: Description + Slug + Destination URL -->
+        <div id="create-redirect-form" class="d-flex flex-column justify-content-evenly align-items-center gap-3 xl:flex-row w-100">
+
+
+            <!-- Description -->
+            <div class="form-field w-100">
+                <label for="new-description" class="form-field-content form-label">
+                    Description
+                </label>
+                <input type="text" id="new-description" placeholder="e.g., To Google" class="form-control" required></input>
+                <small class="form-text">Max 100 characters</small>
             </div>
-            <button id="submit-new-redirect" class="theme-primary btn-solid w-100">Add Redirect</button>
+            
+            <!-- Slug -->
+            <div class="form-field w-100">
+                <label for="new-slug" class="form-field-content form-label">
+                    Slug
+                </label>
+                <div class="input-group">
+                    <label for="new-slug" class="input-group-text">/</label>
+                    <input type="text" id="new-slug" placeholder="e.g., ggl" class="form-control" required></input>
+                </div>
+                <small class="form-text">Do not include "/", no spaces & max 20 characters</small>
+            </div>
+            
+            <!-- Destination URL -->
+            <div class="form-field w-100">
+                <label for="new-destination" class="form-field-content form-label">
+                    Destination URL
+                </label>
+                <input type="url" id="new-destination" placeholder="e.g., https://google.com" class="form-control" required></input>
+                <small class="form-text">Must be a valid http:// or https:// URL</small>
+            </div>
         </div>
+        <button id="submit-new-redirect" class="theme-primary btn-solid w-100" disabled>Add Redirect</button>
     </div>
 
-    <!--Desktop-->
+    <!-- Desktop >md Redirects -->
     <div class="container d-none md:d-block">
-        <table class="table">
+        <table class="table align-middle table-striped table-hover table-borderless">
             <thead>
                 <tr >
                     <th scope="col">Slug</th>
@@ -88,21 +125,20 @@
                     <th scope="col" class="text-center">Delete Redirect</th>
                 </tr>
             </thead>
-            <tbody id="redirects-table-body">
+            <tbody>
                 {{range .}}
                 <tr>
-                    <td><a href="{{.Slug}}">{{.Slug}}</a></td>
+                    <th scope="row"><a href="{{.Slug}}">{{.Slug}}</a></th>
                     <td><a href="{{.Destination}}">{{.Destination}}</a></td>
                     <td>{{.Description}}</td>
                     <td class="text-center"><button onclick="deleteRedirect('{{.Slug}}')" class="theme-danger btn-outline">delete</button></td>
                 </tr>
                 {{end}}
             </tbody>
-
         </table>
     </div>
 
-    <!--Mobile-->
+    <!-- Mobile <md Redirects -->
     <div class="container d-flex flex-column justify-content-start align-items-center md:d-none gap-3">
 
         {{range .}}

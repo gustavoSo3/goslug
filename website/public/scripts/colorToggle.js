@@ -1,10 +1,11 @@
 const toggleBtn = document.getElementById("color-mode-toggle");
 
-toggleBtn.addEventListener("click",()=>{
-    if (document.documentElement.getAttribute("data-bs-theme") === "dark") {
-        document.documentElement.setAttribute("data-bs-theme","light")
-    }
-    else {
-        document.documentElement.setAttribute("data-bs-theme", "dark")
-    }
-})
+if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+        const currentTheme = document.documentElement.getAttribute("data-bs-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
+        
+        document.documentElement.setAttribute("data-bs-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+    });
+}

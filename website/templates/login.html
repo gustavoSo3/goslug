@@ -1,30 +1,47 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" type="image/svg+xml" href="/public/favicon.svg">
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
-    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
 
     <title>GoSlug Log In</title>
 
+    <!--Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-B/GM4XqrwHnWXNOWMbloTmrYXZg10cakYGmpfsR/bbzQ6JAJI4ihuyADKLnBgrCe" crossorigin="anonymous">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/bootstrap@6.0.0-alpha.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-1a/pXj49ZQ1aHEmrJ+gMw1otqoVsYwlEnlD8mIfY2TV03r20Y0CN7uqx1tQogjPL" crossorigin="anonymous"></script>
+
+    <script>
+        const savedTheme = localStorage.getItem("theme") || 
+            (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+        document.documentElement.setAttribute("data-bs-theme", savedTheme);
+    </script>
+
 </head>
 <body>
+
+    <!-- Header -->
     <header class="container my-3 mb-10">
         <div class="d-flex justify-content-between align-items-center">
             
             <!-- Left Side: Logo + Title -->
             <div class="d-flex align-items-center gap-3">
+
+                <!-- Logo  -->
                 <a href="/">
                     <img src="public/favicon.svg" alt="url-redirect Logo" width="50" height="50">
                 </a>
-                <h1 class="h3 mb-0">Log In</h1>
+
+                <!-- Title -->
+                <h1 class="h3">Login</h1>
             </div>
 
+            <!-- Right Side: Color Mode Toggle + Admin Page -->
             <div class="d-flex justify-content-evenly align-items-center gap-3">
-                <button id="color-mode-toggle" class="btn-outline">
+
+                <!-- Color Mode Toggle -->
+                <button id="color-mode-toggle" class="btn-outline ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sun" viewBox="0 0 16 16">
                         <path d="M8 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6m0 1a4 4 0 1 0 0-8 4 4 0 0 0 0 8M8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0m0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13m8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5M3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8m10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0m-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0m9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707M4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708"/>
                     </svg>
@@ -33,33 +50,41 @@
                         <path d="M6 .278a.77.77 0 0 1 .08.858 7.2 7.2 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277q.792-.001 1.533-.16a.79.79 0 0 1 .81.316.73.73 0 0 1-.031.893A8.35 8.35 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.75.75 0 0 1 6 .278"/>
                     </svg>
                 </button>
-                <!-- Right Side: Profile Image -->
+
+                <!-- Admin Page -->
                 <a href="/admin" class="d-inline-block text-decoration-none" style="color: inherit;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-person-lines-fill" viewBox="0 0 16 16">
                         <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m-5 6s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zM11 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5m.5 2.5a.5.5 0 0 0 0 1h4a.5.5 0 0 0 0-1zm2 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1zm0 3a.5.5 0 0 0 0 1h2a.5.5 0 0 0 0-1z"/>
                     </svg>
                 </a>
             </div>
-            
         </div>
     </header>
 
+    <!-- Log in Form -->
     <div class="container mb-10 ">
         <div class="d-flex flex-column justify-content-center align-items-center gap-3">
+
+
+            <!-- Inputs: Username + Password -->
             <div id="login-form" class="d-flex flex-column justify-content-evenly align-items-center gap-3 xl:flex-row w-100">
 
+                <!-- Username -->
                 <div class="input-group">
                     <label for="user-name" class="input-group-text">Username</label>
                     <input type="text" id="user-name" placeholder="Username" class="form-control"></input>
                 </div>
                 
+                <!-- Username -->
                 <div class="input-group">
                     <label for="password" class="input-group-text">Password</label>
                     <input type="password" id="password" placeholder="Password" class="form-control"></input>
                 </div>
                 
             </div>
-            <button id="submit-login" class="theme-primary btn-solid w-100">Login</button>
+
+            <!-- Login Button -->
+            <button id="submit-login" class="theme-primary btn-solid w-100" disabled>Login</button>
         </div>
     </div>
 

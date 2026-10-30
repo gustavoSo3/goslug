@@ -6,7 +6,7 @@ var AUTH_KEY string = "UNAUTORIZED"
 
 // TODO: MAke AUTH_KEY private and create access and validation functions
 
-func ValidLogInCredentials(user string, pass string) bool {
+func ValidLoginCredentials(user string, pass string) bool {
 	return user == AUTH_USERNAME && pass == AUTH_PASSWORD
 }
 

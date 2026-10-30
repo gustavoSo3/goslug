@@ -1,37 +1,77 @@
 
 
 
-const subBtn = document.getElementById("submit-new-redirect");
+const newRedirectBtn = document.getElementById("submit-new-redirect");
+
+const newRedirectDescription = document.getElementById("new-description");
+const newRedirectSlug = document.getElementById("new-slug");
+const newRedirectDestination = document.getElementById("new-destination");
 
 const apiRedirectURL = "/api/redirects";
 
-subBtn.addEventListener("click", async () => {
-    await postNewSlug();
-});
+if (newRedirectBtn) {
+    newRedirectBtn.addEventListener("click", async () => {
+        if (AreValidFields(newRedirectDescription.value, newRedirectSlug.value, newRedirectDestination.value)) {
+            await postRedirect(newRedirectDescription.value, newRedirectSlug.value, newRedirectDestination.value);
+        }
+    });
+}
 
 document.addEventListener("keydown", async (event) => {
-    if(event.key === "Enter"){
-        await postNewSlug();
+    if (AreValidFields(newRedirectDescription.value, newRedirectSlug.value, newRedirectDestination.value)) {
+        if(event.key === "Enter"){
+            await postRedirect(newRedirectDescription.value, newRedirectSlug.value, newRedirectDestination.value);
+        }
+    }
+});
+
+document.addEventListener("keyup", () => {
+    if (AreValidFields(newRedirectDescription.value, newRedirectSlug.value, newRedirectDestination.value)) {
+        newRedirectBtn.disabled = false;
+    } else {
+        newRedirectBtn.disabled = true;
     }
 });
 
 
-async function postNewSlug(){
+function AreValidFields(description, slug, destination) {
 
-    const newRedirectDescription = document.getElementById("new-description");
-    const newRedirectSlug = document.getElementById("new-slug");
-    const newRedirectDestination = document.getElementById("new-destination");
+    description = description.trim();
+    slug = slug.trim();
+    destination = destination.trim();
 
-    if( newRedirectDescription.value === "" || newRedirectSlug.value === "" || newRedirectDestination.value === ""){
-        return
+    // If any empty string
+    if (description === "" || slug === "" || destination === "") return false;
+
+
+	// Description is valid if is less than 100 chars
+    if (description.length > 100) return false;
+
+	// Slug is valid if starts with "/" is less than 20 chars and doesnt have any spaces (maybe will need to check for -/_() later)
+    if (slug.length > 20 || slug.includes(" ")) return false;
+
+	// Must be a valid URL
+    try {
+        const u = new URL(destination);
+        return u.protocol === "http:" || u.protocol === "https:";
+    } catch (err) {
+        return false;
     }
-    const newRedirect = {
-        Description: newRedirectDescription.value,
-        Slug: "/" + newRedirectSlug.value,
-        Destination: newRedirectDestination.value,
-    };
 
-    console.log(newRedirect);
+	return true;
+}
+
+async function postRedirect(description, slug, destination){
+
+    description = description.trim();
+    slug = slug.trim();
+    destination = destination.trim();
+
+    const newRedirect = {
+        Description: description,
+        Slug: "/" + slug,
+        Destination: destination,
+    };
 
     try {
         // Make the POST request to /api/redirects
@@ -61,10 +101,6 @@ async function postNewSlug(){
 
 async function deleteRedirect(slug) {
 
-    const deleteSlug = slug
-
-    console.log(deleteSlug);
-
     if (confirm(`Are you sure you want to delete the Slug: "${slug}"`)){
         try {
             // Make the DELETE request to /api/redirects
@@ -73,7 +109,7 @@ async function deleteRedirect(slug) {
             headers: {
                 'Content-Type': 'application/json' // Tell the server you're sending JSON
             },
-            body: JSON.stringify(deleteSlug) // Convert the JS object into a JSON string
+            body: JSON.stringify(slug) // Convert the JS object into a JSON string
             });
 
             if (res.ok) {

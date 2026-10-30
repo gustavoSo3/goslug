@@ -8,7 +8,7 @@ type Redirect struct {
 	Destination string
 }
 
-type LogInInfo struct {
+type LoginInfo struct {
 	Username string
 	Password string
 }
