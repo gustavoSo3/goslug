@@ -118,7 +118,8 @@ func (db *JSONDB) GetRedirects() ([]types.Redirect, error) {
 	db.mu.Lock()
 	defer db.mu.Unlock()
 
-	returnRedirects := utils.RedirectMaptoSlice(db.Redirects)
+	returnRedirects := types.RedirectSlice(utils.RedirectMaptoSlice(db.Redirects))
+	returnRedirects.Sort()
 
 	return returnRedirects, nil
 }

@@ -81,7 +81,8 @@ func (db *MemoryDB) GetRedirects() ([]types.Redirect, error) {
 	db.mu.Lock()
 	defer db.mu.Unlock()
 
-	returnRedirects := utils.RedirectMaptoSlice(db.redirects)
+	returnRedirects := types.RedirectSlice(utils.RedirectMaptoSlice(db.redirects))
+	returnRedirects.Sort()
 
 	return returnRedirects, nil
 }
