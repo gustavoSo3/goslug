@@ -115,15 +115,21 @@ Also set WorkingDirectory & ExecStart to the correct paths
 Run a container instance using your built image:
 
 ```bash
+mkdir -p data
 docker run -d \
   --name goslug \
   -p 8080:8080 \
+  -e HOST=0.0.0.0 \
   -e USERNAME="admin" \
-  -e PASSWORD="securepassword123" \
+  -e PASSWORD="password" \
   -e STORAGE_DRIVER="json" \
   -v $(pwd)/data:/app/data \
   goslug:latest
 ```
+
+You can run the dockerrun.sh script in the deployment folder too.
+
+For docker make sure to specify the HOST=0.0.0.0 in order to be accesible from outside the container since the default goes to "localhost"
 
 ### 3. Verification
 
