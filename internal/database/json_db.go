@@ -23,7 +23,7 @@ func (db *JSONDB) Load() error {
 	defer db.mu.Unlock()
 	// Set default path for storage file
 	if db.jsonFilepath == "" {
-		db.jsonFilepath = "./bin/redirect_data.json"
+		db.jsonFilepath = "./data/redirects.json"
 	}
 
 	//Open file
