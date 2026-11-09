@@ -6,7 +6,7 @@ After=network.target
 Type=simple
 User={user}
 WorkingDirectory=/home/{user}/goslug
-ExecStart=/home/{user}/goslug/bin/main
+ExecStart=/home/{user}/goslug/bin/goslug
 Restart=always
 RestartSec=5s
 #Environment="PORT=:8080" "USERNAME=admin" "PASSWORD=password" "STORAGE_DRIVER=json"
