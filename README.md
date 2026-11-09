@@ -1,6 +1,6 @@
 # GoSlug
 
-GoSlug is a lightweight, high-performance [Go](https://go.dev/)-based URL redirection service featuring administrative controls, flexible storage adapters, and secure session management.
+GoSlug is a lightweight, high-performance URL redirection service featuring administrative controls, flexible storage adapters, and secure session management writen in [go](https://go.dev/).
 
 <p align="center">
   <img src="./website/public/favicon.svg" width="200" alt="GoSlug Logo">
