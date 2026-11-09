@@ -1,96 +1,144 @@
 # GoSlug
 
-## ENVs
+GoSlug is a lightweight, high-performance [Go](https://go.dev/)-based URL redirection service featuring administrative controls, flexible storage adapters, and secure session management.
 
-`
-HOST
-`
-`
-PORT
-`
-`
-USERNAME
-`
-`
-PASSWORD
-```
-```
-STORAGE_DRIVER
-```
-Options:
-- `memory`
-- `json`
+## Features
 
-## Overview
-GoSlug is a Go-based URL redirection service that features administrative controls, flexible storage adapters, and session management.
+### Core Routing & Endpoints
+* **Fast Redirection:** Instantly maps custom slugs (`/{slug}`) to target URLs.
+* **Admin Dashboard:** Secure web console (`/admin`) for managing links.
+* **REST API:** Endpoints to create, list, and delete redirects programmatically.
 
-## Project Roadmap / TODOs
+### Security & Validation
+* **Strict Input Rules:** Enforces length constraints (max 20 chars for slugs, 100 for descriptions) and validates valid HTTP/HTTPS destinations.
+* **Robust Authentication:** Protected routes via secure session tokens powered by `crypto/rand` and thread-safe concurrency controls (`sync.Mutex`).
+* **Environment Config:** Configurable admin credentials and storage drivers via environment variables.
 
-### 1. Routing & Endpoints
-- [x] `/` - Serves the welcome page
-- [x] `/admin` - Accesses the slug administration dashboard
-- [x] `/{slug}` - Redirects to stored destination URL
-- [x] `POST /api/redirects` - Creates a new redirect (prevents duplicate slugs)
-- [x] `DELETE /api/redirects` - Deletes a redirect referenced by slug
+### Flexible Storage Adapters
+* **Plug-and-Play Drivers:** Choose your storage engine using the `STORAGE_DRIVER` environment variable.
+* **Local JSON File Driver:** Persistent, zero-setup storage (default).
+* **In-Memory Driver:** Volatile, high-performance storage for testing or ephemeral use.
+* *Coming soon: Remote database support (Firestore / MongoDB).*
 
-### 2. Request & Input Validation
-- [x] Validate all fields (ensures required fields are non-empty) For both front and back end
-  - [x] Front
-  - [x] Back
-- [x] Ensure slugs contain no spaces
-- [x] Enforce field length limits:
-  - Description: Maximum 100 characters
-  - Slug: Max 20 characters
-  - Destination: Valid http:// or https:// url
-- [x] Implement Frontend handeling of bad request 
-  - [x] login
-  - [x] api/redirects
+### Developer-Friendly
+* **Lightweight & Zero-Dependency:** Built entirely in Go with clean architecture and no heavy framework bloat.
+* **Structured Logging:** Clear runtime logs for tracking requests and system status.
 
-### 3. Storage Drivers
-- [x] Implement persistent storage support
-- [x] Design generic Database Interface
-- [x] In-memory database driver (volatile, lost on restart)
-- [x] Local JSON file storage driver
-- [x] Implement storage engine selection via environment variable STORAGE_DRIVER
-  - Current options:
-    - memory
-    - json
-  - If ENV not set will default to json
-  - If invalid STORAGE_DRIVER option will exit program
-  - If selected DB fails will exit program
-- [ ] Add remote database driver support (Firestore / MongoDB)
 
-### 4. Authentication & Authorization
-- [x] Environment variable configuration for `USERNAME` and `PASSWORD`
-  - Default fallback credentials: `admin` / `password`
-- [x] Dedicated `/login` endpoint for authentication actions
-- [x] Authentication middleware to protect `/admin` and `/api/redirects` routes
-- [x] Single admin account flow (initial setup requirement)
+## Requirements
 
-### 5. Logging & UI
-- [x] Implement structured runtime logging
-- [x] Build simple Welcome landing page
+To run or build GoSlug, you need **either**:
+
+* **Go 1.27+** (for local binary compilation and execution)
+* **Docker** (to build container images and run without installing Go locally)
+
+## Installation
+
+### Opt 1. Build to source code
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/goslug.git
+   cd goslug
+   ```
+
+2. Download and verify dependencies:
+   ```bash
+   go mod download
+   ```
+
+3. Build the binary executable:
+   ```bash
+   go build -o bin/goslug ./cmd/goslug
+   ```
 
 ---
 
-## Refactoring & Security Enhancements
+### Opt 2. Build Container Image (Using Docker)
 
-### Session & Concurrency Refactor
-- [x] Fix single session bottleneck: Replace `AUTH_KEY` single string with a `map[string]time.Time` session store.
-- [x] Prevent data races: Add `sync.Mutex` (`sessionsMu`) around reads/writes to the session map.
-  - [x] Also added on local db reads and writes (inMemory and JSON)
-- [x] Fix accidental logouts: Remove `credentials.AUTH_KEY = "UNAUTORIZED"` on failed login attempts.
-- [x] Use secure tokens: Replace hashed timestamp with `crypto/rand` token generation (`CreateSession()`).
-- [x] Fix session deletion: Add `RevokeSession(key)` to delete tokens from the map upon logout (`DELETE` request).
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/goslug.git
+   cd goslug
+   ```
 
-### Redirect Array to Map
-- [x] Refactor Redirects to use an map, insted of an array, and maybe just get a list of it when asking GetRedirects()
+2. Build the Docker image:
+   ```bash
+   docker build -t goslug:latest .
+   ```
 
-### Sec
-- [ ] prevent loops by checking if previous href was destiny?
-  - or dont allow to save if loop detected?? how do u detect a loop?
+## Execution
 
----
+### 1. Environment Configuration
+
+GoSlug supports configuration through environment variables:
+
+| Variable | Default Value | Description |
+| :--- | :--- | :--- |
+| `PORT` | `8080` | Port for the HTTP server to listen on |
+| `USERNAME` | `admin` | Admin username for dashboard access |
+| `PASSWORD` | `password` | Admin password for dashboard access |
+| `STORAGE_DRIVER` | `json` | Storage engine choice (`json` or `memory`) |
+
+### 2.1. Running Locally
+
+Set environment variables and launch the compiled application:
+
+```bash
+# Set environment variables
+export USERNAME="myadmin"
+export PASSWORD="supersecretpassword"
+export STORAGE_DRIVER="json"
+export PORT="8080"
+
+# Run the application
+./bin/goslug
+```
+
+Alternatively, run directly with `go run`:
+
+```bash
+USERNAME="admin" PASSWORD="password" STORAGE_DRIVER="memory" go run ./cmd/goslug
+```
+
+#### Other alternative: run the systemd service
+
+The repo includes a goslug.service file you can use to run the complied aplication as a service. 
+
+Just make sure you change the {user} and environment variables inside it.
+
+Also set WorkingDirectory & ExecStart to the correct paths
+
+
+### 2.2. Running with Docker
+
+Run a container instance using your built image:
+
+```bash
+docker run -d \
+  --name goslug \
+  -p 8080:8080 \
+  -e USERNAME="admin" \
+  -e PASSWORD="securepassword123" \
+  -e STORAGE_DRIVER="json" \
+  -v $(pwd)/data:/app/data \
+  goslug:latest
+```
+
+### 3. Verification
+
+Once running, verify the server is operating by visiting:
+
+* **Welcome Page:** `http://localhost:8080/`
+* **Admin Dashboard:** `http://localhost:8080/admin`
+* **Redirect Example:** `http://localhost:8080/{your-slug}`
+
+
+## Recomendations
+
+If you want to run the server on an 80 or 443 port you can use the reverse poxy service from [caddy](https://github.com/caddyserver/caddy)
+
+
 
 ## Testing Plan
 
@@ -102,10 +150,7 @@ GoSlug is a Go-based URL redirection service that features administrative contro
   - [ ] `GET /admin`
   - [ ] `API /api/redirects`
 
-
----
-
-### Extras Ideas:
+## Extras Ideas:
 
 - [ ] Option to generate random slug
 - [ ] Add link access counter
@@ -114,3 +159,4 @@ GoSlug is a Go-based URL redirection service that features administrative contro
 - [ ] Time frame slug
 - [ ] Tagging and group by tagging
 - [ ] Multi account setup
+- [ ] Add remote database driver support (Firestore / MongoDB)

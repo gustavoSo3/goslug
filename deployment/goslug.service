@@ -4,12 +4,12 @@ After=network.target
 
 [Service]
 Type=simple
-User=gus_sotres
-WorkingDirectory=/home/gus_sotres/goslug
-ExecStart=/home/gus_sotres/goslug/bin/main
+User={user}
+WorkingDirectory=/home/{user}/goslug
+ExecStart=/home/{user}/goslug/bin/main
 Restart=always
 RestartSec=5s
-#Environment="PORT=:8080" "USERNAME=admin" "PASSWORD=password"
+#Environment="PORT=:8080" "USERNAME=admin" "PASSWORD=password" "STORAGE_DRIVER=json"
 
 [Install]
 WantedBy=multi-user.target

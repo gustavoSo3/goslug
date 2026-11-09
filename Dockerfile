@@ -1,10 +1,12 @@
 FROM golang:1.27-alpine
 
-WORKDIR /goslug
+WORKDIR /app
 
 COPY . .
 
 RUN go mod tidy
+
+RUN go mod download
 
 RUN mkdir ./bin
 
