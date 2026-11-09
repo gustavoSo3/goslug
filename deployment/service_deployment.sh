@@ -2,6 +2,8 @@ cd ~/goslug
 
 git pull
 
+./deployment/build.sh
+
 sudo systemctl stop caddy
 sudo systemctl stop goslug.service
 
