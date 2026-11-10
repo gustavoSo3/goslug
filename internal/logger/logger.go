@@ -9,7 +9,7 @@ func PrintMenu() {
 	fmt.Println("======================================================================================")
 	fmt.Println("   @_@       ──► GoSlug")
 	fmt.Println("  (   )====> ──► Welcome")
-	fmt.Println("  `---'      ──► https://github.com/gustavoSo3/goslug | v0.1b")
+	fmt.Println("  `---'      ──► https://github.com/gustavoSo3/goslug | v1.0")
 	fmt.Println("======================================================================================")
 }
 
